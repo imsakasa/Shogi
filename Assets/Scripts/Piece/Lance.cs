@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 /// <summary>
@@ -7,11 +8,13 @@ using UnityEngine;
 /// </summary>
 public class Lance : IPiece
 {
+	public IReadOnlyList<Address> MOVE_RANGE = new List<Address>
+	{
+		new Address(0, 1),
+	};
+
 	public List<Address> MoveRanges(Address currentPos)
 	{
-		var ranges = new List<Address>();
-		ranges.Add(new Address(currentPos.X, currentPos.Y + 1));
-
-		return ranges;
+		return PieceUtility.CalcForeverMoveRange(currentPos, MOVE_RANGE);
 	}
 }

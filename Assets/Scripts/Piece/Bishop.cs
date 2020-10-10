@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 /// <summary>
@@ -7,10 +8,16 @@ using UnityEngine;
 /// </summary>
 public class Bishop : IPiece
 {
-    public List<Address> MoveRanges(Address currentPos)
+	public IReadOnlyList<Address> MOVE_RANGE = new List<Address>
 	{
-		var ranges = new List<Address>();
+		new Address(1, 1),
+		new Address(-1, -1),
+		new Address(-1, 1),
+		new Address(1, -1),
+	};
 
-		return ranges;
+	public List<Address> MoveRanges(Address currentPos)
+	{
+		return PieceUtility.CalcForeverMoveRange(currentPos, MOVE_RANGE);
 	}
 }

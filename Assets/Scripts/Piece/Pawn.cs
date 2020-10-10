@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 /// <summary>
@@ -11,6 +12,8 @@ public class Pawn : IPiece
 	{
 		var ranges = new List<Address>();
 		ranges.Add(new Address(currentPos.X, currentPos.Y + 1));
+
+		ranges.Where(address => address.IsValid());
 
 		return ranges;
 	}

@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 /// <summary>
@@ -12,6 +13,8 @@ public class Knight : IPiece
 		var ranges = new List<Address>();
 		ranges.Add(new Address(currentPos.X + 1, currentPos.Y + 2));
 		ranges.Add(new Address(currentPos.X - 1, currentPos.Y + 1));
+
+		ranges.Where(address => address.IsValid());
 
 		return ranges;
 	}

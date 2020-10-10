@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 /// <summary>
@@ -15,6 +16,8 @@ public class Silver : IPiece
 		ranges.Add(new Address(currentPos.X + 1, currentPos.Y - 1));
 		ranges.Add(new Address(currentPos.X - 1, currentPos.Y - 1));
 		ranges.Add(new Address(currentPos.X - 1, currentPos.Y + 1));
+
+		ranges.Where(address => address.IsValid());
 
 		return ranges;
 	}
