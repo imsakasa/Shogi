@@ -14,7 +14,7 @@ public class Square
 		OutOfBoard = -1,
 		Empty = 0,
 
-		King = 1,		// 王将、玉将
+		King = 1,		// 王将
 		Rook = 2,		// 飛車
 		Bishop = 3,		// 角行
 		Gold = 4,		// 金将
