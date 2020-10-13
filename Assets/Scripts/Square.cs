@@ -52,7 +52,16 @@ public class Square
 		Enemy_Pro_Pawn = Enemy + Pro_Pawn,
 	}
 
-	public SquareInfo Info;
+	public Square(int x, int y)
+	{
+		m_Address = new Address(x, y);
+		m_Info = SquareInfo.OutOfBoard;
+	}
+
+	private Address m_Address;
+	private SquareInfo m_Info;
+
+	public void SetSquareInfo(SquareInfo info) => m_Info = info;
 
 	public bool IsSelf(SquareInfo info)
 	{

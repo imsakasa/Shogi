@@ -10,7 +10,6 @@ public interface IPiece
 
 public struct Address
 {
-	public static readonly int MAX_WIDTH = 9;
 	public int X { get; private set; }
 	public int Y { get; private set; }
 
@@ -22,12 +21,12 @@ public struct Address
 
 	public bool IsValid()
 	{
-		if (MAX_WIDTH > X || X < 0)
+		if (Board.BOARD_WIDTH - 1 > X || X < 1)
 		{
 			return false;
 		}
 
-		if (MAX_WIDTH > Y || Y < 0)
+		if (Board.BOARD_WIDTH - 1 > Y || Y < 1)
 		{
 			return false;
 		}
