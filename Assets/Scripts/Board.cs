@@ -2,23 +2,31 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Board
+public class Board : MonoBehaviour
 {
 	public static readonly int BOARD_WIDTH = 11;
 
 	// 将棋は 9 × 9 マスだが、番兵を入れるため上下左右1マスずつ追加
 	Square[,] m_Board = new Square[BOARD_WIDTH, BOARD_WIDTH];
 
-	public void InitBoard()
+	void Start()
 	{
-		for (int x = 0; x < BOARD_WIDTH; x++)
+		for (int y = 1; y < BOARD_WIDTH - 1; y++)
 		{
-			for (int y = 0; y < BOARD_WIDTH; y++)
+			GameObject rowObj = GameObject.Find($"Row_{y}");
+			for (int x = 1; x < BOARD_WIDTH - 1; x++)
 			{
-				m_Board[x, y] = new Square(x, y);
+				GameObject targetParts = rowObj.FindChild($"Column_{x}");
+				m_Board[x, y] = targetParts.GetComponent<Square>();
+				m_Board[x, y].Setup(x, y);
 			}
 		}
 
+		InitBoard();
+	}
+
+	public void InitBoard()
+	{
 		for (int x = 1; x < BOARD_WIDTH - 1; x++)
 		{
 			for (int y = 1; y < BOARD_WIDTH - 1; y++)
