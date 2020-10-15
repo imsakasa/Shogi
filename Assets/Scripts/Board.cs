@@ -7,7 +7,19 @@ public class Board : MonoBehaviour
 	public static readonly int BOARD_WIDTH = 11;
 
 	// 将棋は 9 × 9 マスだが、番兵を入れるため上下左右1マスずつ追加
-	Square[,] m_Board = new Square[BOARD_WIDTH, BOARD_WIDTH];
+	// TODO: 番兵をまだ活用できてないので後ほど対応を検討
+	private Square[,] m_Board = new Square[BOARD_WIDTH, BOARD_WIDTH];
+	public Square GetSquare(Address address)
+	{
+		if (!address.IsValid())
+		{
+			return null;
+		}
+
+		return m_Board[address.X, address.Y];
+	}
+
+	private PieceMoveInfo m_PieceMoveInfo = new PieceMoveInfo();
 
 	void Start()
 	{
@@ -18,7 +30,7 @@ public class Board : MonoBehaviour
 			{
 				GameObject targetParts = rowObj.FindChild($"Column_{x}");
 				m_Board[x, y] = targetParts.GetComponent<Square>();
-				m_Board[x, y].Setup(x, y);
+				m_Board[x, y].Setup(new Address(x, y), OnPressedSquare);
 			}
 		}
 
@@ -47,17 +59,17 @@ public class Board : MonoBehaviour
 		}
 
 		m_Board[2, 8].SetPieceInfo(PieceInfo.Rook);		// 飛車
-		m_Board[8, 8].SetPieceInfo(PieceInfo.Bishop);		// 角行
+		m_Board[8, 8].SetPieceInfo(PieceInfo.Bishop);	// 角行
 
-		m_Board[1, 9].SetPieceInfo(PieceInfo.Lance);		// 香車
-		m_Board[2, 9].SetPieceInfo(PieceInfo.Knight);		// 桂馬
-		m_Board[3, 9].SetPieceInfo(PieceInfo.Silver);		// 銀将
+		m_Board[1, 9].SetPieceInfo(PieceInfo.Lance);	// 香車
+		m_Board[2, 9].SetPieceInfo(PieceInfo.Knight);	// 桂馬
+		m_Board[3, 9].SetPieceInfo(PieceInfo.Silver);	// 銀将
 		m_Board[4, 9].SetPieceInfo(PieceInfo.Gold);		// 金将
 		m_Board[5, 9].SetPieceInfo(PieceInfo.King);		// 王将
 		m_Board[6, 9].SetPieceInfo(PieceInfo.Gold);		// 金将
-		m_Board[7, 9].SetPieceInfo(PieceInfo.Silver);		// 銀将
-		m_Board[8, 9].SetPieceInfo(PieceInfo.Knight);		// 桂馬
-		m_Board[9, 9].SetPieceInfo(PieceInfo.Lance);		// 香車
+		m_Board[7, 9].SetPieceInfo(PieceInfo.Silver);	// 銀将
+		m_Board[8, 9].SetPieceInfo(PieceInfo.Knight);	// 桂馬
+		m_Board[9, 9].SetPieceInfo(PieceInfo.Lance);	// 香車
 	}
 
 	public void InitEnemyPiece()
@@ -68,16 +80,36 @@ public class Board : MonoBehaviour
 		}
 
 		m_Board[2, 2].SetPieceInfo(PieceInfo.Enemy_Rook);		// 飛車
-		m_Board[8, 2].SetPieceInfo(PieceInfo.Enemy_Bishop);	// 角行
+		m_Board[8, 2].SetPieceInfo(PieceInfo.Enemy_Bishop);		// 角行
 
 		m_Board[1, 1].SetPieceInfo(PieceInfo.Enemy_Lance);		// 香車
-		m_Board[2, 1].SetPieceInfo(PieceInfo.Enemy_Knight);	// 桂馬
-		m_Board[3, 1].SetPieceInfo(PieceInfo.Enemy_Silver);	// 銀将
+		m_Board[2, 1].SetPieceInfo(PieceInfo.Enemy_Knight);		// 桂馬
+		m_Board[3, 1].SetPieceInfo(PieceInfo.Enemy_Silver);		// 銀将
 		m_Board[4, 1].SetPieceInfo(PieceInfo.Enemy_Gold);		// 金将
 		m_Board[5, 1].SetPieceInfo(PieceInfo.Enemy_King);		// 王将
 		m_Board[6, 1].SetPieceInfo(PieceInfo.Enemy_Gold);		// 金将
-		m_Board[7, 1].SetPieceInfo(PieceInfo.Enemy_Silver);	// 銀将
-		m_Board[8, 1].SetPieceInfo(PieceInfo.Enemy_Knight);	// 桂馬
+		m_Board[7, 1].SetPieceInfo(PieceInfo.Enemy_Silver);		// 銀将
+		m_Board[8, 1].SetPieceInfo(PieceInfo.Enemy_Knight);		// 桂馬
 		m_Board[9, 1].SetPieceInfo(PieceInfo.Enemy_Lance);		// 香車
+	}
+
+	private void OnPressedSquare(Address address)
+	{
+		var selectSquare = GetSquare(address);
+		if (m_PieceMoveInfo.IsSelecting)
+		{
+			// 同じマスを選択すればリセット
+			if (address == m_PieceMoveInfo.MoveFrom)
+			{
+				m_PieceMoveInfo.Reset();
+				return;
+			}
+			
+			m_PieceMoveInfo.SetMoveTo(address);
+		}
+		else
+		{
+			m_PieceMoveInfo.SetMoveFrom(address);
+		}
 	}
 }

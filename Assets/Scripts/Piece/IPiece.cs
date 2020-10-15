@@ -10,6 +10,8 @@ public interface IPiece
 
 public struct Address
 {
+	public static readonly Address INVALID_ADDRESS = new Address(-1, -1);
+
 	public int X { get; private set; }
 	public int Y { get; private set; }
 
@@ -21,12 +23,12 @@ public struct Address
 
 	public bool IsValid()
 	{
-		if (Board.BOARD_WIDTH - 1 > X || X < 1)
+		if (X >= Board.BOARD_WIDTH - 1 || X < 1)
 		{
 			return false;
 		}
 
-		if (Board.BOARD_WIDTH - 1 > Y || Y < 1)
+		if (Y >= Board.BOARD_WIDTH - 1 || Y < 1)
 		{
 			return false;
 		}
@@ -35,4 +37,10 @@ public struct Address
 	}
 
 	public static Address operator +(Address a, Address b) => new Address(a.X + b.X, a.Y + b.Y);
+	public static bool operator ==(Address a, Address b) => (a.X == b.X && a.Y == b.Y);
+	public static bool operator !=(Address a, Address b) => (a.X != b.X || a.Y != b.Y);
+
+	// 以下2行が無いと CS0660 の Warning が出るため記載
+	public override bool Equals(object o) => true;
+	public override int GetHashCode() => 0;
 }

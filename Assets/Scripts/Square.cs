@@ -12,15 +12,17 @@ public class Square : MonoBehaviour
 	[SerializeField]
 	private Image m_PieceImage;
 
-	public void Setup(int x, int y)
-	{
-		m_Address = new Address(x, y);
-		m_PieceInfo = PieceInfo.OutOfBoard;
-		m_PieceImage.enabled = false;
-	}
-
 	private Address m_Address;
 	private PieceInfo m_PieceInfo;
+	private Action<Address> m_OnPressed;
+
+	public void Setup(Address address, Action<Address> onPressed)
+	{
+		m_Address = address;
+		m_PieceInfo = PieceInfo.OutOfBoard;
+		m_PieceImage.enabled = false;
+		m_OnPressed = onPressed;
+	}
 
 	public void SetPieceInfo(PieceInfo info)
 	{
@@ -38,18 +40,20 @@ public class Square : MonoBehaviour
 		}
 	}
 
-	public bool IsSelf(PieceInfo info)
+	public bool IsSelf()
 	{
-		return (PieceInfo.King <= info && info <= PieceInfo.Pro_Pawn);
+		return (PieceInfo.King <= m_PieceInfo && m_PieceInfo <= PieceInfo.Pro_Pawn);
 	}
 
-	public bool IsEnemy(PieceInfo info)
+	public bool IsEnemy()
 	{
-		return (info & PieceInfo.Enemy) == PieceInfo.Enemy;
+		return (m_PieceInfo & PieceInfo.Enemy) == PieceInfo.Enemy;
 	}
+
+	public bool IsPieceEmpty => m_PieceInfo <= PieceInfo.Empty;
 
 	public void OnPressed()
 	{
-		Debug.LogError("===x::"+m_Address.X+"==y::"+m_Address.Y+"");
+		m_OnPressed.Invoke(m_Address);
 	} 
 }
