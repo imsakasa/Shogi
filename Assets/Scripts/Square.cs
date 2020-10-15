@@ -47,4 +47,9 @@ public class Square : MonoBehaviour
 	{
 		return (info & PieceInfo.Enemy) == PieceInfo.Enemy;
 	}
+
+	public void OnPressed()
+	{
+		Debug.LogError("===x::"+m_Address.X+"==y::"+m_Address.Y+"");
+	} 
 }
