@@ -79,8 +79,8 @@ public class Board : MonoBehaviour
 			m_Board[x, 3].SetPieceInfo(PieceInfo.Enemy_Pawn);	// 歩兵
 		}
 
-		m_Board[2, 2].SetPieceInfo(PieceInfo.Enemy_Rook);		// 飛車
-		m_Board[8, 2].SetPieceInfo(PieceInfo.Enemy_Bishop);		// 角行
+		m_Board[8, 2].SetPieceInfo(PieceInfo.Enemy_Rook);		// 飛車
+		m_Board[2, 2].SetPieceInfo(PieceInfo.Enemy_Bishop);		// 角行
 
 		m_Board[1, 1].SetPieceInfo(PieceInfo.Enemy_Lance);		// 香車
 		m_Board[2, 1].SetPieceInfo(PieceInfo.Enemy_Knight);		// 桂馬
