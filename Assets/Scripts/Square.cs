@@ -9,6 +9,9 @@ using UnityEngine.UI;
 /// </summary>
 public class Square : MonoBehaviour
 {
+	public static readonly Color SELECTING_COLOR = new Color(1f, 0.6f, 0f);
+	public static readonly Color NON_SELECTING_COLOR = Color.white;
+
 	[SerializeField]
 	private Image m_PieceImage;
 
@@ -50,7 +53,13 @@ public class Square : MonoBehaviour
 		return (m_PieceInfo & PieceInfo.Enemy) == PieceInfo.Enemy;
 	}
 
-	public bool IsPieceEmpty => m_PieceInfo <= PieceInfo.Empty;
+	public bool IsEmpty() => m_PieceInfo <= PieceInfo.Empty;
+
+	public void SetSelectingColor(bool isSelecting)
+	{
+		m_PieceImage.color = isSelecting ?
+			SELECTING_COLOR : NON_SELECTING_COLOR;
+	}
 
 	public void OnPressed()
 	{

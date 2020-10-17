@@ -95,21 +95,37 @@ public class Board : MonoBehaviour
 
 	private void OnPressedSquare(Address address)
 	{
-		var selectSquare = GetSquare(address);
+		var selectingSquare = GetSquare(address);
 		if (m_PieceMoveInfo.IsSelecting)
 		{
+			if (selectingSquare.IsSelf())
+			{
+				Debug.LogError("そのマスは選択できません。");
+				return;
+			}
+			var selectedSquare = GetSquare(m_PieceMoveInfo.MoveFrom);
+			selectedSquare.SetSelectingColor(isSelecting: false);
+
 			// 同じマスを選択すればリセット
 			if (address == m_PieceMoveInfo.MoveFrom)
 			{
 				m_PieceMoveInfo.Reset();
-				return;
 			}
-			
-			m_PieceMoveInfo.SetMoveTo(address);
+			else
+			{
+				m_PieceMoveInfo.SetMoveTo(address);
+			}
 		}
 		else
 		{
+			if (selectingSquare.IsEmpty())
+			{
+				Debug.LogError("そのマスは選択できません。");
+				return;
+			}
+
 			m_PieceMoveInfo.SetMoveFrom(address);
+			selectingSquare.SetSelectingColor(isSelecting: true);
 		}
 	}
 }
