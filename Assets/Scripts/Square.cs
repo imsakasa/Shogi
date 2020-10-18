@@ -15,21 +15,21 @@ public class Square : MonoBehaviour
 	[SerializeField]
 	private Image m_PieceImage;
 
-	private Address m_Address;
-	private PieceInfo m_PieceInfo;
-	private Action<Address> m_OnPressed;
+	public Address Address { get; private set; }
+	public PieceInfo PieceInfo { get; private set; }
+	private Action<Square> m_OnPressed;
 
-	public void Setup(Address address, Action<Address> onPressed)
+	public void Setup(Address address, Action<Square> onPressed)
 	{
-		m_Address = address;
-		m_PieceInfo = PieceInfo.OutOfBoard;
+		Address = address;
+		PieceInfo = PieceInfo.OutOfBoard;
 		m_PieceImage.enabled = false;
 		m_OnPressed = onPressed;
 	}
 
 	public void SetPieceInfo(PieceInfo info)
 	{
-		m_PieceInfo = info;
+		PieceInfo = info;
 		if (info > PieceInfo.Empty)
 		{
 			var sprite = Resources.Load<Sprite>($"Textures/japanese-chess/koma/60x64/{info.ToString()}");
@@ -43,17 +43,19 @@ public class Square : MonoBehaviour
 		}
 	}
 
+	public void ResetPieceInfo() => SetPieceInfo(PieceInfo.Empty);
+
 	public bool IsSelf()
 	{
-		return (PieceInfo.King <= m_PieceInfo && m_PieceInfo <= PieceInfo.Pro_Pawn);
+		return (PieceInfo.King <= PieceInfo && PieceInfo <= PieceInfo.Pro_Pawn);
 	}
 
 	public bool IsEnemy()
 	{
-		return (m_PieceInfo & PieceInfo.Enemy) == PieceInfo.Enemy;
+		return (PieceInfo & PieceInfo.Enemy) == PieceInfo.Enemy;
 	}
 
-	public bool IsEmpty() => m_PieceInfo <= PieceInfo.Empty;
+	public bool IsEmpty() => PieceInfo <= PieceInfo.Empty;
 
 	public void SetSelectingColor(bool isSelecting)
 	{
@@ -63,6 +65,6 @@ public class Square : MonoBehaviour
 
 	public void OnPressed()
 	{
-		m_OnPressed.Invoke(m_Address);
+		m_OnPressed.Invoke(this);
 	} 
 }

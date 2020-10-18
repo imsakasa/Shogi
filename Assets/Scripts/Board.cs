@@ -93,39 +93,49 @@ public class Board : MonoBehaviour
 		m_Board[9, 1].SetPieceInfo(PieceInfo.Enemy_Lance);		// 香車
 	}
 
-	private void OnPressedSquare(Address address)
+	private void OnPressedSquare(Square pressedSquare)
 	{
-		var selectingSquare = GetSquare(address);
 		if (m_PieceMoveInfo.IsSelecting)
 		{
-			if (selectingSquare.IsSelf())
-			{
-				Debug.LogError("そのマスは選択できません。");
-				return;
-			}
-			var selectedSquare = GetSquare(m_PieceMoveInfo.MoveFrom);
-			selectedSquare.SetSelectingColor(isSelecting: false);
-
-			// 同じマスを選択すればリセット
-			if (address == m_PieceMoveInfo.MoveFrom)
-			{
-				m_PieceMoveInfo.Reset();
-			}
-			else
-			{
-				m_PieceMoveInfo.SetMoveTo(address);
-			}
+			PutPiece(pressedSquare);
 		}
 		else
 		{
-			if (selectingSquare.IsEmpty())
-			{
-				Debug.LogError("そのマスは選択できません。");
-				return;
-			}
-
-			m_PieceMoveInfo.SetMoveFrom(address);
-			selectingSquare.SetSelectingColor(isSelecting: true);
+			SelectPiece(pressedSquare);
 		}
+	}
+
+	private void SelectPiece(Square pressedSquare)
+	{
+		if (pressedSquare.IsEmpty() || pressedSquare.IsEnemy())
+		{
+			Debug.LogError("そのマスは選択できません。");
+			return;
+		}
+
+		m_PieceMoveInfo.SetMoveFrom(pressedSquare.Address);
+		pressedSquare.SetSelectingColor(isSelecting: true);
+	}
+
+	private void PutPiece(Square pressedSquare)
+	{
+		if (pressedSquare.IsSelf())
+		{
+			Debug.LogError("そのマスには置けません。");
+			return;
+		}
+		var selectingSquare = GetSquare(m_PieceMoveInfo.MoveFrom);
+		selectingSquare.SetSelectingColor(isSelecting: false);
+
+		// 同じマスを選択すればリセット
+		if (m_PieceMoveInfo.IsSameAddress(pressedSquare.Address))
+		{
+			m_PieceMoveInfo.Reset();
+			return;
+		}
+
+		pressedSquare.SetPieceInfo(selectingSquare.PieceInfo);
+		selectingSquare.ResetPieceInfo();
+		m_PieceMoveInfo.Reset();
 	}
 }
