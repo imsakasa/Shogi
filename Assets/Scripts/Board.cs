@@ -135,6 +135,7 @@ public class Board : MonoBehaviour
 		}
 
 		pressedSquare.SetPieceInfo(selectingSquare.PieceInfo);
+		m_PieceMoveInfo.SetMoveTo(pressedSquare.Address);
 		selectingSquare.ResetPieceInfo();
 		m_PieceMoveInfo.Reset();
 	}

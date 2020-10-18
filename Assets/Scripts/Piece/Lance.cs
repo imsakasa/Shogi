@@ -13,8 +13,14 @@ public class Lance : IPiece
 		new Address(0, 1),
 	};
 
-	public List<Address> MoveRanges(Address currentPos)
+	public bool CanMove(Board board, PieceMoveInfo moveInfo)
 	{
-		return PieceUtility.CalcForeverMoveRange(currentPos, MOVE_RANGE);
+		var moveRanges = MoveRanges(board, moveInfo.MoveFrom);
+		return moveRanges.Any(address => address == moveInfo.MoveTo);
+	}
+
+	public List<Address> MoveRanges(Board board, Address from)
+	{
+		return PieceUtility.CalcForeverMoveRange(board, from, MOVE_RANGE);
 	}
 }

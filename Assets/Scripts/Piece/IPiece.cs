@@ -5,7 +5,8 @@ using UnityEngine;
 
 public interface IPiece
 {
-	List<Address> MoveRanges(Address currentPos);
+	bool CanMove(Board board, PieceMoveInfo moveInfo);
+	List<Address> MoveRanges(Board board, Address from);
 }
 
 public struct Address
