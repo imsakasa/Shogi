@@ -113,30 +113,41 @@ public class Board : MonoBehaviour
 			return;
 		}
 
-		m_PieceMoveInfo.SetMoveFrom(pressedSquare.Address);
+		m_PieceMoveInfo.SetMoveFrom(pressedSquare);
 		pressedSquare.SetSelectingColor(isSelecting: true);
 	}
 
 	private void PutPiece(Square pressedSquare)
 	{
-		if (pressedSquare.IsSelf())
-		{
-			Debug.LogError("そのマスには置けません。");
-			return;
-		}
 		var selectingSquare = GetSquare(m_PieceMoveInfo.MoveFrom);
-		selectingSquare.SetSelectingColor(isSelecting: false);
 
 		// 同じマスを選択すればリセット
 		if (m_PieceMoveInfo.IsSameAddress(pressedSquare.Address))
 		{
 			m_PieceMoveInfo.Reset();
+			selectingSquare.SetSelectingColor(isSelecting: false);
 			return;
 		}
 
-		pressedSquare.SetPieceInfo(selectingSquare.PieceInfo);
+		if (pressedSquare.IsSelf())
+		{
+			Debug.LogError("そのマスには置けません。");
+			return;
+		}
+
 		m_PieceMoveInfo.SetMoveTo(pressedSquare.Address);
+
+		IPiece piece = PieceUtility.CreatePiece(selectingSquare.PieceInfo);
+		if (!piece.CanMove(this, m_PieceMoveInfo))
+		{
+			Debug.LogError("そのマスには置けません。");
+			return;
+		}
+
+		selectingSquare.SetSelectingColor(isSelecting: false);
+		pressedSquare.SetPieceInfo(selectingSquare.PieceInfo);
 		selectingSquare.ResetPieceInfo();
+
 		m_PieceMoveInfo.Reset();
 	}
 }

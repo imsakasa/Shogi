@@ -44,4 +44,9 @@ public struct Address
 	// 以下2行が無いと CS0660 の Warning が出るため記載
 	public override bool Equals(object o) => true;
 	public override int GetHashCode() => 0;
+
+	public override string ToString()
+	{
+		return $"X:{X}, Y:{Y}";
+	}
 }

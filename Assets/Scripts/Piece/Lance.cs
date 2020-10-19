@@ -10,7 +10,7 @@ public class Lance : IPiece
 {
 	public IReadOnlyList<Address> MOVE_RANGE = new List<Address>
 	{
-		new Address(0, 1),
+		new Address(0, -1),
 	};
 
 	public bool CanMove(Board board, PieceMoveInfo moveInfo)

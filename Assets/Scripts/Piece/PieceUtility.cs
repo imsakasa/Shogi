@@ -13,21 +13,20 @@ public static class PieceUtility
 		while (true)
 		{
 			tmpAddress += defineRanges[defineRangeIndex];
-			if (!tmpAddress.IsValid())
+			if (!tmpAddress.IsValid() || board.GetSquare(tmpAddress).IsSelf())
 			{
 				defineRangeIndex++;
 				if (defineRangeIndex == defineRanges.Count)
 				{
 					break;
 				}
+				tmpAddress = from;
 				continue;
 			}
 
 			ranges.Add(tmpAddress);
 		}
-
-		var addresses = RemoveSelfSquare(board, ranges);
-		return addresses;
+		return ranges;
 	}
 
 	public static List<Address> RemoveSelfSquare(Board board, List<Address> addresses)
@@ -49,4 +48,29 @@ public static class PieceUtility
 
 		return addresses;
 	} 
+
+	public static IPiece CreatePiece(PieceInfo pieceInfo)
+	{
+		switch (pieceInfo)
+		{
+			case PieceInfo.King:
+				return new King();
+			case PieceInfo.Rook:
+				return new Rook();
+			case PieceInfo.Bishop:
+				return new Bishop();
+			case PieceInfo.Gold:
+				return new Gold();
+			case PieceInfo.Silver:
+				return new Silver();
+			case PieceInfo.Knight:
+				return new Knight();
+			case PieceInfo.Lance:
+				return new Lance();
+			case PieceInfo.Pawn:
+				return new Pawn();
+			default:
+				return null;
+		}
+	}
 }

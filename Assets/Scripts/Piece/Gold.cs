@@ -27,12 +27,12 @@ public class Gold : IPiece
 	public List<Address> MoveRanges(Board board, Address from)
 	{
 		var ranges = new List<Address>();
-		ranges.Add(new Address(from.X, from.Y + 1));
-		ranges.Add(new Address(from.X + 1, from.Y + 1));
-		ranges.Add(new Address(from.X + 1, from.Y));
 		ranges.Add(new Address(from.X, from.Y - 1));
+		ranges.Add(new Address(from.X - 1, from.Y - 1));
 		ranges.Add(new Address(from.X - 1, from.Y));
-		ranges.Add(new Address(from.X - 1, from.Y + 1));
+		ranges.Add(new Address(from.X, from.Y + 1));
+		ranges.Add(new Address(from.X + 1, from.Y));
+		ranges.Add(new Address(from.X + 1, from.Y - 1));
 
 		ranges.Where(address => address.IsValid());
 

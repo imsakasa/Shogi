@@ -11,9 +11,12 @@ public class PieceMoveInfo
 	public bool IsSelecting => MoveFrom.IsValid();
 	public bool IsPromote => (PieceInfo & PieceInfo.Promoted) == PieceInfo.Promoted;
 
-	public void SetMoveFrom(Address from) => MoveFrom = from;
+	public void SetMoveFrom(Square square)
+	{
+		MoveFrom = square.Address;
+		PieceInfo = square.PieceInfo;
+	}
 	public void SetMoveTo(Address to) => MoveTo = to;
-	public void SetPieceInfo(PieceInfo info) => PieceInfo = info;
 	public bool IsSameAddress(Address to) => MoveFrom == to;
 
 	public void Reset()
