@@ -36,7 +36,7 @@ public class Gold : IPiece
 
 		ranges.Where(address => address.IsValid());
 
-		ranges = PieceUtility.RemoveSelfSquare(board, ranges);
+		PieceUtility.RemoveSelfSquare(board, ref ranges);
 		return ranges;
 	}
 }

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public static class PieceUtility
 {
@@ -29,24 +30,9 @@ public static class PieceUtility
 		return ranges;
 	}
 
-	public static List<Address> RemoveSelfSquare(Board board, List<Address> addresses)
+	public static void RemoveSelfSquare(Board board, ref List<Address> addresses)
 	{
-		var removeAddresses = new List<Address>();
-		foreach (var address in addresses)
-		{
-			var square = board.GetSquare(address);
-			if (square.IsSelf())
-			{
-				removeAddresses.Add(address);
-			}
-		}
-
-		foreach (var address in removeAddresses)
-		{
-			addresses.Remove(address);
-		}
-
-		return addresses;
+		addresses.Where(address => !board.GetSquare(address).IsSelf());
 	} 
 
 	public static IPiece CreatePiece(PieceInfo pieceInfo)

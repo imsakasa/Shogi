@@ -21,7 +21,7 @@ public class Knight : IPiece
 		ranges.Add(new Address(from.X + 1, from.Y - 1));
 
 		ranges.Where(address => address.IsValid());
-		ranges = PieceUtility.RemoveSelfSquare(board, ranges);
+		PieceUtility.RemoveSelfSquare(board, ref ranges);
 		return ranges;
 	}
 }
