@@ -14,7 +14,14 @@ public static class PieceUtility
 		while (true)
 		{
 			tmpAddress += defineRanges[defineRangeIndex];
-			if (!tmpAddress.IsValid() || board.GetSquare(tmpAddress).IsSelf())
+			var square = board.GetSquare(tmpAddress);
+			bool canAddAddress = tmpAddress.IsValid() && !square.IsSelf();
+			if (canAddAddress)
+			{
+				ranges.Add(tmpAddress);
+			}
+
+			if (!canAddAddress || square.IsEnemy())
 			{
 				defineRangeIndex++;
 				if (defineRangeIndex == defineRanges.Count)
@@ -24,8 +31,6 @@ public static class PieceUtility
 				tmpAddress = from;
 				continue;
 			}
-
-			ranges.Add(tmpAddress);
 		}
 		return ranges;
 	}
