@@ -64,4 +64,10 @@ public static class PieceUtility
 				return null;
 		}
 	}
+
+	public static PieceInfo ReverseInfoToSelf(PieceInfo pieceInfo)
+	{
+		return pieceInfo -= PieceInfo.Enemy;
+	}
+
 }

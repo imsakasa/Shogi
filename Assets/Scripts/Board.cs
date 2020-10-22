@@ -6,6 +6,10 @@ public class Board : MonoBehaviour
 {
 	public static readonly int BOARD_WIDTH = 11;
 
+	[SerializeField]
+	private OwnPieces m_SelfAcquiredPieces;
+	private OwnPieces m_EnemyAcquiredPieces;
+
 	// 将棋は 9 × 9 マスだが、番兵を入れるため上下左右1マスずつ追加
 	// TODO: 番兵をまだ活用できてないので後ほど対応を検討
 	private Square[,] m_Board = new Square[BOARD_WIDTH, BOARD_WIDTH];
@@ -142,6 +146,12 @@ public class Board : MonoBehaviour
 		{
 			Debug.LogError("そのマスには置けません。");
 			return;
+		}
+
+		if (pressedSquare.IsEnemy())
+		{
+			// 敵の駒を獲得したら持ち駒に追加
+			m_SelfAcquiredPieces.AcquiredPiece(pressedSquare.PieceInfo);
 		}
 
 		selectingSquare.SetSelectingColor(isSelecting: false);
