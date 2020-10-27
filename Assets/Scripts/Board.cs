@@ -123,13 +123,13 @@ public class Board : MonoBehaviour
 
 	private void PutPiece(Square pressedSquare)
 	{
-		var selectingSquare = GetSquare(m_PieceMoveInfo.MoveFrom);
+		var selectingSquare = m_PieceMoveInfo.SelectingSquare;
 
 		// 同じマスを選択すればリセット
 		if (m_PieceMoveInfo.IsSameAddress(pressedSquare.Address))
 		{
-			m_PieceMoveInfo.Reset();
 			selectingSquare.SetSelectingColor(isSelecting: false);
+			m_PieceMoveInfo.Reset();
 			return;
 		}
 
@@ -151,7 +151,7 @@ public class Board : MonoBehaviour
 		if (pressedSquare.IsEnemy())
 		{
 			// 敵の駒を獲得したら持ち駒に追加
-			m_SelfAcquiredPieces.AcquiredPiece(pressedSquare.PieceInfo);
+			m_SelfAcquiredPieces.AcquiredPiece(pressedSquare.PieceInfo, OnPressedSquare);
 		}
 
 		selectingSquare.SetSelectingColor(isSelecting: false);

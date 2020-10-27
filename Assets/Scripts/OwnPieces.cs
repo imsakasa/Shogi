@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,7 +13,7 @@ public class OwnPieces : MonoBehaviour
 	[SerializeField] private Transform m_LancesRoot;
 	[SerializeField] private Transform m_PawnsRoot;
 
-	public void AcquiredPiece(PieceInfo pieceInfo)
+	public void AcquiredPiece(PieceInfo pieceInfo, Action<Square> onPressedPiece)
 	{
 		var parentTrans = GetParentTransform(pieceInfo);
 		if (parentTrans == null)
@@ -29,7 +30,7 @@ public class OwnPieces : MonoBehaviour
 
 		// TODO: Squareクラスは盤面の1つを表すクラスなので、本当はPieceクラスとかにしたい
 		var square = instance.GetComponent<Square>();
-		square.Setup(Address.INVALID_ADDRESS, null);
+		square.Setup(Address.INVALID_ADDRESS, onPressedPiece);
 		square.SetPieceInfo(PieceUtility.ReverseInfoToSelf(pieceInfo));
 	}
 
