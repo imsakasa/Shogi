@@ -37,8 +37,8 @@ public static class PieceUtility
 
 	public static void RemoveSelfSquare(Board board, ref List<Address> addresses)
 	{
-		addresses.Where(address => !board.GetSquare(address).IsSelf());
-	} 
+		addresses.Where(address => !board.GetSquare(address).IsSelf()).ToList();
+	}
 
 	public static IPiece CreatePiece(PieceInfo pieceInfo)
 	{

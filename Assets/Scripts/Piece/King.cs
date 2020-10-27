@@ -26,7 +26,7 @@ public class King : IPiece
 		ranges.Add(new Address(from.X + 1, from.Y));
 		ranges.Add(new Address(from.X + 1, from.Y - 1));
 
-		ranges.Where(address => address.IsValid());
+		ranges.Where(address => address.IsValid()).ToList();
 
 		PieceUtility.RemoveSelfSquare(board, ref ranges);
 		return ranges;
