@@ -11,6 +11,7 @@ public class PieceMoveInfo
 
 	public bool IsSelecting => SelectingSquare != null;
 	public bool IsPromote => (PieceInfo & PieceInfo.Promoted) == PieceInfo.Promoted;
+	public bool IsAcquiredPiece => IsSelecting && !SelectingSquare.Address.IsValid();
 
 	public void SetMoveFrom(Square square)
 	{

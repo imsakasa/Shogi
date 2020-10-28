@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Board : MonoBehaviour
@@ -133,16 +134,9 @@ public class Board : MonoBehaviour
 			return;
 		}
 
-		if (pressedSquare.IsSelf())
-		{
-			Debug.LogError("そのマスには置けません。");
-			return;
-		}
-
 		m_PieceMoveInfo.SetMoveTo(pressedSquare.Address);
 
-		IPiece piece = PieceUtility.CreatePiece(selectingSquare.PieceInfo);
-		if (!piece.CanMove(this, m_PieceMoveInfo))
+		if (!CanPutPiece(pressedSquare, selectingSquare))
 		{
 			Debug.LogError("そのマスには置けません。");
 			return;
@@ -159,5 +153,39 @@ public class Board : MonoBehaviour
 		selectingSquare.ResetPieceInfo();
 
 		m_PieceMoveInfo.Reset();
+	}
+
+	private bool CanPutPiece(Square pressedSquare, Square selectingSquare)
+	{
+		if (pressedSquare.IsSelf())
+		{
+			return false;
+		}
+
+		if (m_PieceMoveInfo.IsAcquiredPiece)
+		{
+			if (m_PieceMoveInfo.PieceInfo == PieceInfo.Pawn)
+			{
+				// 二歩チェック
+				if (IsTwoPawn(pressedSquare.Address.X))
+				{
+					return false;
+				}
+			}
+		}
+
+		IPiece piece = PieceUtility.CreatePiece(selectingSquare.PieceInfo);
+		if (!piece.CanMove(this, m_PieceMoveInfo))
+		{
+			return false;
+		}
+
+		return true;
+	}
+
+	private bool IsTwoPawn(int x)
+	{
+		var ranges = PieceUtility.VerticalRanges(x);
+		return ranges.Any(address => GetSquare(address).PieceInfo == PieceInfo.Pawn);
 	}
 }

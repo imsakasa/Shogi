@@ -70,4 +70,14 @@ public static class PieceUtility
 		return pieceInfo -= PieceInfo.Enemy;
 	}
 
+	public static List<Address> VerticalRanges(int x)
+	{
+		var ranges = new List<Address>();
+		for (int y = 1; y < Board.BOARD_WIDTH - 1; y++)
+		{
+			ranges.Add(new Address(x, y));
+		}
+
+		return ranges;
+	}
 }
