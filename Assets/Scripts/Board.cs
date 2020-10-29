@@ -185,7 +185,7 @@ public class Board : MonoBehaviour
 
 	private bool IsTwoPawn(int x)
 	{
-		var ranges = PieceUtility.VerticalRanges(x);
+		var ranges = BoardUtility.VerticalRanges(x);
 		return ranges.Any(address => GetSquare(address).PieceInfo == PieceInfo.Pawn);
 	}
 }
