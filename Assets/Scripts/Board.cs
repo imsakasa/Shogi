@@ -152,6 +152,11 @@ public class Board : MonoBehaviour
 		pressedSquare.SetPieceInfo(selectingSquare.PieceInfo);
 		selectingSquare.ResetPieceInfo();
 
+		if (BoardUtility.IsEnemyArea(pressedSquare.Address))
+		{
+			SystemUI.I.OpenYesNoDialog("成り", "成りますか？", PromotedPiece, SystemUI.I.CloseDialog);
+		}
+
 		m_PieceMoveInfo.Reset();
 	}
 
@@ -187,5 +192,10 @@ public class Board : MonoBehaviour
 	{
 		var ranges = BoardUtility.VerticalRanges(x);
 		return ranges.Any(address => GetSquare(address).PieceInfo == PieceInfo.Pawn);
+	}
+
+	private void PromotedPiece()
+	{
+		Debug.LogError("===PromotedPiece==");
 	}
 }
