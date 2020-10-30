@@ -155,7 +155,7 @@ public class Board : MonoBehaviour
 		{
 			SystemUI.I.OpenYesNoDialog(
 				string.Empty,
-				"Do you want to promote piece?",
+				$"Do you want to promote piece?\n Selecting piece: {selectingSquare.PieceInfo.ToString()}",
 				() => PromotePiece(pressedSquare),
 				SystemUI.I.CloseDialog);
 		}
