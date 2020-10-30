@@ -83,8 +83,9 @@ public static class PieceUtility
 
 	public static bool CanPromote(PieceInfo pieceInfo)
 	{
-		// 王将は成らない
-		if (pieceInfo == PieceInfo.King)
+		// 王将と金将は成らない
+		if (pieceInfo == PieceInfo.King ||
+			pieceInfo == PieceInfo.Gold)
 		{
 			return false;
 		}

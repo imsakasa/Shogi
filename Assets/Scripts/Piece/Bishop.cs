@@ -8,7 +8,7 @@ using UnityEngine;
 /// </summary>
 public class Bishop : IPiece
 {
-	public IReadOnlyList<Address> MOVE_RANGE = new List<Address>
+	public static IReadOnlyList<Address> MOVE_RANGE = new List<Address>
 	{
 		new Address(1, 1),
 		new Address(-1, -1),
