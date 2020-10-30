@@ -80,4 +80,9 @@ public static class PieceUtility
 
 		return ranges;
 	}
+
+	public static bool CanPromote(PieceInfo pieceInfo)
+	{
+		return PieceInfo.Promoted > pieceInfo && pieceInfo > PieceInfo.Empty;
+	} 
 }

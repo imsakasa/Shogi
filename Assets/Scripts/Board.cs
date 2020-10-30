@@ -150,13 +150,17 @@ public class Board : MonoBehaviour
 
 		selectingSquare.SetSelectingColor(isSelecting: false);
 		pressedSquare.SetPieceInfo(selectingSquare.PieceInfo);
-		selectingSquare.ResetPieceInfo();
 
-		if (BoardUtility.IsEnemyArea(pressedSquare.Address))
+		if (CanPiecePromote(pressedSquare.Address, selectingSquare.PieceInfo))
 		{
-			SystemUI.I.OpenYesNoDialog(string.Empty, "Do you want to promote piece?", PromotedPiece, SystemUI.I.CloseDialog);
+			SystemUI.I.OpenYesNoDialog(
+				string.Empty,
+				"Do you want to promote piece?",
+				() => PromotePiece(pressedSquare),
+				SystemUI.I.CloseDialog);
 		}
 
+		selectingSquare.ResetPieceInfo();
 		m_PieceMoveInfo.Reset();
 	}
 
@@ -194,8 +198,14 @@ public class Board : MonoBehaviour
 		return ranges.Any(address => GetSquare(address).PieceInfo == PieceInfo.Pawn);
 	}
 
-	private void PromotedPiece()
+	private bool CanPiecePromote(Address putAddress, PieceInfo pieceInfo)
 	{
-		Debug.LogError("===PromotedPiece==");
+		return BoardUtility.IsEnemyArea(putAddress) && PieceUtility.CanPromote(pieceInfo);
+	}
+
+	private void PromotePiece(Square targetSquare)
+	{
+		var currentPieceInfo = targetSquare.PieceInfo;
+		targetSquare.SetPieceInfo(currentPieceInfo | PieceInfo.Promoted);
 	}
 }
