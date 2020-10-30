@@ -154,7 +154,7 @@ public class Board : MonoBehaviour
 
 		if (BoardUtility.IsEnemyArea(pressedSquare.Address))
 		{
-			SystemUI.I.OpenYesNoDialog("成り", "成りますか？", PromotedPiece, SystemUI.I.CloseDialog);
+			SystemUI.I.OpenYesNoDialog(string.Empty, "Do you want to promote piece?", PromotedPiece, SystemUI.I.CloseDialog);
 		}
 
 		m_PieceMoveInfo.Reset();
