@@ -23,8 +23,7 @@ public class Silver : IPiece
 		ranges.Add(new Address(from.X + 1, from.Y + 1));
 		ranges.Add(new Address(from.X + 1, from.Y - 1));
 
-		ranges.Where(address => address.IsValid()).ToList();
-		PieceUtility.RemoveSelfSquare(board, ref ranges);
-		return ranges;
+		var validRanges = ranges.Where(address => address.IsValid() && board.IsPuttedSelfPiece(address)).ToList();
+		return validRanges;
 	}
 }

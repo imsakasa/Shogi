@@ -83,6 +83,12 @@ public static class PieceUtility
 
 	public static bool CanPromote(PieceInfo pieceInfo)
 	{
+		// 王将は成らない
+		if (pieceInfo == PieceInfo.King)
+		{
+			return false;
+		}
+
 		return PieceInfo.Promoted > pieceInfo && pieceInfo > PieceInfo.Empty;
 	} 
 }

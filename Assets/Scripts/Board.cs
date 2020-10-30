@@ -208,4 +208,9 @@ public class Board : MonoBehaviour
 		var currentPieceInfo = targetSquare.PieceInfo;
 		targetSquare.SetPieceInfo(currentPieceInfo | PieceInfo.Promoted);
 	}
+
+	public bool IsPuttedSelfPiece(Address address)
+	{
+		return GetSquare(address).IsSelf();
+	}
 }
