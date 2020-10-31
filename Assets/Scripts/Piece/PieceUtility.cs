@@ -44,22 +44,20 @@ public static class PieceUtility
 	{
 		switch (pieceInfo)
 		{
-			case PieceInfo.King:
-				return new King();
-			case PieceInfo.Rook:
-				return new Rook();
-			case PieceInfo.Bishop:
-				return new Bishop();
-			case PieceInfo.Gold:
-				return new Gold();
-			case PieceInfo.Silver:
-				return new Silver();
-			case PieceInfo.Knight:
-				return new Knight();
-			case PieceInfo.Lance:
-				return new Lance();
-			case PieceInfo.Pawn:
-				return new Pawn();
+			case PieceInfo.King: return new King();
+			case PieceInfo.Rook: return new Rook();
+			case PieceInfo.Bishop: return new Bishop();
+			case PieceInfo.Gold: return new Gold();
+			case PieceInfo.Silver: return new Silver();
+			case PieceInfo.Knight: return new Knight();
+			case PieceInfo.Lance: return new Lance();
+			case PieceInfo.Pawn: return new Pawn();
+			case PieceInfo.Pro_Rook: return new PromotedRoook();
+			case PieceInfo.Pro_Bishop: return new PromotedBishop();
+			case PieceInfo.Pro_Silver: return new PromotedSilver();
+			case PieceInfo.Pro_Knight: return new PromotedKnight();
+			case PieceInfo.Pro_Lance: return new PromotedLance();
+			case PieceInfo.Pro_Pawn: return new PromotedPawn();
 			default:
 				return null;
 		}

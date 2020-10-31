@@ -47,7 +47,6 @@ public class OwnPieces : MonoBehaviour
 				return m_BishopRoot;
 
 			case PieceInfo.Enemy_Gold:
-			case PieceInfo.Enemy_Pro_Gold:
 				return m_GoldsRoot;
 
 			case PieceInfo.Enemy_Silver:
