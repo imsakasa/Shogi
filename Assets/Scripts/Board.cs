@@ -142,13 +142,21 @@ public class Board : MonoBehaviour
 			return;
 		}
 
+		selectingSquare.SetSelectingColor(isSelecting: false);
+
 		if (pressedSquare.IsEnemy())
 		{
+			// 敵の王将を取れば勝ち
+			if (IsAcquiredEnemyKing(pressedSquare.PieceInfo))
+			{
+				FinishGame(isWin: true);
+				return;
+			}
+
 			// 敵の駒を獲得したら持ち駒に追加
 			m_SelfAcquiredPieces.AcquiredPiece(pressedSquare.PieceInfo, OnPressedSquare);
 		}
 
-		selectingSquare.SetSelectingColor(isSelecting: false);
 		pressedSquare.SetPieceInfo(selectingSquare.PieceInfo);
 
 		if (CanPiecePromote(pressedSquare.Address, selectingSquare.PieceInfo))
@@ -212,5 +220,27 @@ public class Board : MonoBehaviour
 	public bool IsPuttedSelfPiece(Address address)
 	{
 		return GetSquare(address).IsSelf();
+	}
+
+	private void AcquiredEnemyPiece(Square pressedSquare)
+	{
+		// 敵の駒を獲得したら持ち駒に追加
+		m_SelfAcquiredPieces.AcquiredPiece(pressedSquare.PieceInfo, OnPressedSquare);
+	}
+
+	private bool IsAcquiredEnemyKing(PieceInfo pieceInfo)
+	{
+		return pieceInfo == PieceInfo.Enemy_King;
+	}
+
+	private void FinishGame(bool isWin)
+	{
+		ResetGame();
+	}
+
+	private void ResetGame()
+	{
+		m_PieceMoveInfo.Reset();
+		InitBoard();
 	}
 }

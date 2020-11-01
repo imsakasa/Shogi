@@ -89,5 +89,5 @@ public static class PieceUtility
 		}
 
 		return PieceInfo.Promoted > pieceInfo && pieceInfo > PieceInfo.Empty;
-	} 
+	}
 }
