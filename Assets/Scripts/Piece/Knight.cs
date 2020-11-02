@@ -20,7 +20,7 @@ public class Knight : IPiece
 		ranges.Add(new Address(from.X - 1, from.Y - 2));
 		ranges.Add(new Address(from.X + 1, from.Y - 1));
 
-		var validRanges = ranges.Where(address => address.IsValid() && board.IsPuttedSelfPiece(address)).ToList();
+		var validRanges = ranges.Where(address => address.IsValid() && !board.IsPuttedSelfPiece(address)).ToList();
 		return validRanges;
 	}
 }
