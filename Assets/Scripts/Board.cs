@@ -9,6 +9,7 @@ public class Board : MonoBehaviour
 
 	[SerializeField]
 	private OwnPieces m_SelfAcquiredPieces;
+	[SerializeField]
 	private OwnPieces m_EnemyAcquiredPieces;
 
 	// 将棋は 9 × 9 マスだが、番兵を入れるため上下左右1マスずつ追加
