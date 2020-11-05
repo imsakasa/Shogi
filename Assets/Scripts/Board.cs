@@ -1,11 +1,15 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Linq;
 using UnityEngine;
 
 public class Board : MonoBehaviour
 {
 	public static readonly int BOARD_WIDTH = 11;
+
+	private EnemyAI m_EnemyAI = new EnemyAI();
 
 	[SerializeField]
 	private OwnPieces m_SelfAcquiredPieces;
@@ -99,11 +103,17 @@ public class Board : MonoBehaviour
 		m_Board[9, 1].SetPieceInfo(PieceInfo.Enemy_Lance);		// 香車
 	}
 
-	private void OnPressedSquare(Square pressedSquare)
+	private async void OnPressedSquare(Square pressedSquare)
 	{
 		if (m_PieceMoveInfo.IsSelecting)
 		{
-			PutPiece(pressedSquare);
+			bool isNextEnemyTurn = false;
+			PutPiece(pressedSquare, out isNextEnemyTurn);
+			if (isNextEnemyTurn)
+			{
+				await Task.Delay(500);
+				m_EnemyAI.PutPiece(m_Board);
+			}
 		}
 		else
 		{
@@ -123,54 +133,59 @@ public class Board : MonoBehaviour
 		pressedSquare.SetSelectingColor(isSelecting: true);
 	}
 
-	private void PutPiece(Square pressedSquare)
+	private void PutPiece(Square moveToSquare, out bool isNextEnemyTurn)
 	{
-		var selectingSquare = m_PieceMoveInfo.SelectingSquare;
+		var moveFromSquare = m_PieceMoveInfo.SelectingSquare;
 
 		// 同じマスを選択すればリセット
-		if (m_PieceMoveInfo.IsSameAddress(pressedSquare.Address))
+		if (m_PieceMoveInfo.IsSameAddress(moveToSquare.Address))
 		{
-			selectingSquare.SetSelectingColor(isSelecting: false);
+			moveFromSquare.SetSelectingColor(isSelecting: false);
 			m_PieceMoveInfo.Reset();
+			isNextEnemyTurn = false;
 			return;
 		}
 
-		m_PieceMoveInfo.SetMoveTo(pressedSquare.Address);
+		m_PieceMoveInfo.SetMoveTo(moveToSquare.Address);
 
-		if (!CanPutPiece(pressedSquare, selectingSquare))
+		if (!CanPutPiece(moveToSquare, moveFromSquare))
 		{
 			Debug.LogError("そのマスには置けません。");
+			isNextEnemyTurn = false;
 			return;
 		}
 
-		selectingSquare.SetSelectingColor(isSelecting: false);
+		moveFromSquare.SetSelectingColor(isSelecting: false);
 
-		if (pressedSquare.IsEnemy())
+		if (moveToSquare.IsEnemy())
 		{
 			// 敵の王将を取れば勝ち
-			if (IsAcquiredEnemyKing(pressedSquare.PieceInfo))
+			if (IsAcquiredEnemyKing(moveToSquare.PieceInfo))
 			{
 				FinishGame(isWin: true);
+				isNextEnemyTurn = false;
 				return;
 			}
 
 			// 敵の駒を獲得したら持ち駒に追加
-			m_SelfAcquiredPieces.AcquiredPiece(pressedSquare.PieceInfo, OnPressedSquare);
+			m_SelfAcquiredPieces.AcquiredPiece(moveToSquare.PieceInfo, OnPressedSquare);
 		}
 
-		pressedSquare.SetPieceInfo(selectingSquare.PieceInfo);
+		moveToSquare.SetPieceInfo(moveFromSquare.PieceInfo);
 
-		if (CanPiecePromote(pressedSquare.Address, selectingSquare.PieceInfo))
+		if (CanPiecePromote(moveToSquare.Address, moveFromSquare.PieceInfo))
 		{
 			SystemUI.I.OpenYesNoDialog(
 				string.Empty,
-				$"Do you want to promote piece?\n Selecting piece: {selectingSquare.PieceInfo.ToString()}",
-				() => PromotePiece(pressedSquare),
+				$"Do you want to promote piece?\n Selecting piece: {moveFromSquare.PieceInfo.ToString()}",
+				() => PromotePiece(moveToSquare),
 				SystemUI.I.CloseDialog);
 		}
 
-		selectingSquare.ResetPieceInfo();
+		moveFromSquare.ResetPieceInfo();
 		m_PieceMoveInfo.Reset();
+
+		isNextEnemyTurn = true;
 	}
 
 	private bool CanPutPiece(Square pressedSquare, Square selectingSquare)
