@@ -173,13 +173,13 @@ public class Board : MonoBehaviour
 
 		moveToSquare.SetPieceInfo(moveFromSquare.PieceInfo);
 
+		// 成ることができるなら成る/成らないのダイアログ表示
 		if (CanPiecePromote(moveToSquare.Address, moveFromSquare.PieceInfo))
 		{
 			SystemUI.I.OpenYesNoDialog(
 				string.Empty,
 				$"Do you want to promote piece?\n Selecting piece: {moveFromSquare.PieceInfo.ToString()}",
-				() => PromotePiece(moveToSquare),
-				SystemUI.I.CloseDialog);
+				() => PromotePiece(moveToSquare));
 		}
 
 		moveFromSquare.ResetPieceInfo();

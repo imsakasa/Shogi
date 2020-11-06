@@ -25,7 +25,15 @@ public class SystemDialog : MonoBehaviour
 	{
 		m_Title.text = title;
 		m_Body.text = body;
-		m_YesButton.onClick.AddListener(yesCallback);
-		m_NoButton.onClick.AddListener(noCallback);
+
+		if (yesCallback != null)
+		{
+			m_YesButton.onClick.AddListener(yesCallback);
+		}
+
+		if (noCallback != null)
+		{
+			m_NoButton.onClick.AddListener(noCallback);
+		}
 	}
 }

@@ -28,7 +28,7 @@ public class SystemUI : SingletonMonoBehaviour<SystemUI>
 	}
 	
 
-	public void OpenYesNoDialog(string title, string body, UnityAction yesCallback, UnityAction noCallback)
+	public void OpenYesNoDialog(string title, string body, UnityAction yesCallback = null, UnityAction noCallback = null)
 	{
 		CreateDialog(YES_NO_DIALOG_PATH);
 
