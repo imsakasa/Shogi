@@ -217,7 +217,7 @@ public class Board : MonoBehaviour
 			return false;
 		}
 
-		if (m_PieceMoveInfo.PieceInfo != PieceInfo.Pawn)
+		if (pieceMoveInfo.PieceInfo != PieceInfo.Pawn)
 		{
 			return false;
 		}
