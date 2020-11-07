@@ -41,6 +41,57 @@ public class PieceDefine
 		public static readonly string Enemy_Pro_Lance = "Enemy_Pro_Lance";
 		public static readonly string Enemy_Pro_Pawn = "Enemy_Pro_Pawn";
 	}
+
+	// 評価関数用の駒の価値
+	public class PieceValue
+	{
+		public static int Empty = 0;
+		public static int King = 10000;		// 王将
+		public static int Rook = 2000;		// 飛車
+		public static int Bishop = 1800;	// 角行
+		public static int Gold = 1200;		// 金将
+		public static int Silver = 1000;	// 銀将
+		public static int Knight = 700;		// 桂馬
+		public static int Lance = 600;		// 香車
+		public static int Pawn = 100;		// 歩兵
+
+		public static int PromotedRook = 2200;		// 竜王(成り飛車)
+		public static int PromotedBishop = 2000; 	// 竜馬(成り角行)
+		public static int PromotedSilver = 1200; 	// 成銀
+		public static int PromotedKnight = 1200; 	// 成桂
+		public static int PromotedLance = 1200;		// 成香
+		public static int PromotedPawn = 1200;		// と金
+	}
+
+	public static int GetPieceValue(PieceInfo pieceInfo, bool isAcquiredPiece)
+	{
+		int pieceValue = 0;
+		switch (pieceInfo)
+		{
+			case PieceInfo.King: pieceValue += PieceValue.King; break;
+			case PieceInfo.Rook: pieceValue += PieceValue.Rook; break;
+			case PieceInfo.Bishop: pieceValue += PieceValue.Bishop; break;
+			case PieceInfo.Gold: pieceValue += PieceValue.Gold; break;
+			case PieceInfo.Silver: pieceValue += PieceValue.Silver; break;
+			case PieceInfo.Knight: pieceValue += PieceValue.Knight; break;
+			case PieceInfo.Lance: pieceValue += PieceValue.Lance; break;
+			case PieceInfo.Pawn: pieceValue += PieceValue.Pawn; break;
+
+			case PieceInfo.Pro_Rook: pieceValue += PieceValue.PromotedRook; break;
+			case PieceInfo.Pro_Bishop: pieceValue += PieceValue.PromotedBishop; break;
+			case PieceInfo.Pro_Silver: pieceValue += PieceValue.PromotedSilver; break;
+			case PieceInfo.Pro_Knight: pieceValue += PieceValue.PromotedKnight; break;
+			case PieceInfo.Pro_Lance: pieceValue += PieceValue.PromotedLance; break;
+			case PieceInfo.Pro_Pawn: pieceValue += PieceValue.PromotedPawn; break;
+		}
+
+		if (isAcquiredPiece)
+		{
+			pieceValue += (pieceValue * 105 / 100);
+		}
+
+		return pieceValue;
+	}
 }
 
 [Flags]

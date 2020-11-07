@@ -103,7 +103,7 @@ public class Board : MonoBehaviour
 		m_Board[9, 1].SetPieceInfo(PieceInfo.Enemy_Lance);		// 香車
 	}
 
-	private async void OnPressedSquare(Square pressedSquare)
+	private void OnPressedSquare(Square pressedSquare)
 	{
 		if (m_PieceMoveInfo.IsSelecting)
 		{
@@ -111,8 +111,9 @@ public class Board : MonoBehaviour
 			PutPiece(pressedSquare, out isNextEnemyTurn);
 			if (isNextEnemyTurn)
 			{
-				await Task.Delay(500);
-				m_EnemyAI.PutPiece(m_Board);
+				// TODO: 敵の手
+				// await Task.Delay(500);
+				// m_EnemyAI.PutPiece(m_Board);
 			}
 		}
 		else
@@ -168,7 +169,7 @@ public class Board : MonoBehaviour
 			}
 
 			// 敵の駒を獲得したら持ち駒に追加
-			m_SelfAcquiredPieces.AcquiredPiece(moveToSquare.PieceInfo, OnPressedSquare);
+			AcquiredEnemyPiece(moveToSquare);
 		}
 
 		moveToSquare.SetPieceInfo(moveFromSquare.PieceInfo);
