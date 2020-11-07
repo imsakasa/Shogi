@@ -195,16 +195,10 @@ public class Board : MonoBehaviour
 			return false;
 		}
 
-		if (m_PieceMoveInfo.IsAcquiredPiece)
+		// 二歩チェック
+		if (IsTwoPawn(m_PieceMoveInfo, pressedSquare.Address.X))
 		{
-			if (m_PieceMoveInfo.PieceInfo == PieceInfo.Pawn)
-			{
-				// 二歩チェック
-				if (IsTwoPawn(pressedSquare.Address.X))
-				{
-					return false;
-				}
-			}
+			return false;
 		}
 
 		IPiece piece = PieceUtility.CreatePiece(selectingSquare.PieceInfo);
@@ -216,8 +210,18 @@ public class Board : MonoBehaviour
 		return true;
 	}
 
-	private bool IsTwoPawn(int x)
+	private bool IsTwoPawn(PieceMoveInfo pieceMoveInfo, int x)
 	{
+		if (!pieceMoveInfo.IsAcquiredPiece)
+		{
+			return false;
+		}
+
+		if (m_PieceMoveInfo.PieceInfo != PieceInfo.Pawn)
+		{
+			return false;
+		}
+
 		var ranges = BoardUtility.VerticalRanges(x);
 		return ranges.Any(address => GetSquare(address).PieceInfo == PieceInfo.Pawn);
 	}
