@@ -57,10 +57,10 @@ public class PieceDefine
 
 		public static int PromotedRook = 2200;		// 竜王(成り飛車)
 		public static int PromotedBishop = 2000; 	// 竜馬(成り角行)
-		public static int PromotedSilver = 1200; 	// 成銀
-		public static int PromotedKnight = 1200; 	// 成桂
-		public static int PromotedLance = 1200;		// 成香
-		public static int PromotedPawn = 1200;		// と金
+		public static int PromotedSilver = 1190; 	// 成銀
+		public static int PromotedKnight = 1180; 	// 成桂
+		public static int PromotedLance = 1170;		// 成香
+		public static int PromotedPawn = 1160;		// と金
 	}
 
 	public static int GetPieceValue(PieceInfo pieceInfo, bool isAcquiredPiece)
