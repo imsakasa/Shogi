@@ -3,12 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IPiece
-{
-	bool CanMove(Board board, PieceMoveInfo moveInfo);
-	List<Address> MoveRanges(Board board, Address from);
-}
-
 public interface IEnemyPiece
 {
 	List<Address> MoveRanges(Board board, Address from);

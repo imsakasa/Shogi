@@ -5,15 +5,15 @@ using System.Linq;
 /// <summary>
 /// 竜王(成り飛車)
 /// </summary>
-public class PromotedRoook : IPiece
+public class PromotedRoook : PieceBase
 {
-	public bool CanMove(Board board, PieceMoveInfo moveInfo)
+	public override bool CanMove(Board board, PieceMoveInfo moveInfo)
 	{
 		var moveRanges = MoveRanges(board, moveInfo.MoveFrom);
 		return moveRanges.Any(address => address == moveInfo.MoveTo);
 	}
 
-	public List<Address> MoveRanges(Board board, Address from)
+	public override List<Address> MoveRanges(Board board, Address from)
 	{
 		var rookRanges = PieceUtility.CalcForeverMoveRange(board, from, Rook.MOVE_RANGE);
 

@@ -28,6 +28,21 @@ public class EnemyAI
 		return moveInfo;
 	}
 
+	// private PieceMoveInfo ThinkMoveSquare(Square[,] board)
+	// {
+	// 	int maxMoveValue = 0;
+	// 	for (int x = 1; x < Board.BOARD_WIDTH - 1; x++)
+	// 	{
+	// 		for (int y = 1; y < Board.BOARD_WIDTH - 1; y++)
+	// 		{
+	// 			Square square = board[x, y];
+	// 			if (!square.IsEnemy()) continue;
+
+
+	// 		}
+	// 	}
+	// }
+
 	private Square CalcMoveFromSquare(Square[,] board)
 	{
 		return board[1, 3];

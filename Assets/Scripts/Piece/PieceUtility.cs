@@ -40,7 +40,7 @@ public static class PieceUtility
 		addresses.Where(address => !board.GetSquare(address).IsSelf()).ToList();
 	}
 
-	public static IPiece CreatePiece(PieceInfo pieceInfo)
+	public static PieceBase CreatePiece(PieceInfo pieceInfo)
 	{
 		switch (pieceInfo)
 		{

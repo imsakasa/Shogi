@@ -202,7 +202,7 @@ public class Board : MonoBehaviour
 			return false;
 		}
 
-		IPiece piece = PieceUtility.CreatePiece(selectingSquare.PieceInfo);
+		PieceBase piece = PieceUtility.CreatePiece(selectingSquare.PieceInfo);
 		if (!piece.CanMove(this, m_PieceMoveInfo))
 		{
 			return false;
