@@ -13,7 +13,7 @@ public class Gold : PieceBase
 		new Address(0, -1),
 		new Address(-1, -1),
 		new Address(-1, 0),
-		new Address(0, +1),
+		new Address(0, 1),
 		new Address(1, 0),
 		new Address(1, -1),
 	};

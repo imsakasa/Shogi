@@ -243,6 +243,11 @@ public class Board : MonoBehaviour
 		return GetSquare(address).IsSelf();
 	}
 
+	public bool IsPuttedEnemyPiece(Address address)
+	{
+		return GetSquare(address).IsEnemy();
+	}
+
 	private void AcquiredEnemyPiece(Square pressedSquare)
 	{
 		// 敵の駒を獲得したら持ち駒に追加

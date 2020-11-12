@@ -18,7 +18,7 @@ public class Knight : PieceBase
 	{
 		var ranges = new List<Address>();
 		ranges.Add(new Address(from.X - 1, from.Y - 2));
-		ranges.Add(new Address(from.X + 1, from.Y - 1));
+		ranges.Add(new Address(from.X + 1, from.Y - 2));
 
 		var validRanges = ranges.Where(address => address.IsValid() && !board.IsPuttedSelfPiece(address)).ToList();
 		return validRanges;
