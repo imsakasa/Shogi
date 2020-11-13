@@ -103,7 +103,7 @@ public class Board : MonoBehaviour
 		m_Board[9, 1].SetPieceInfo(PieceInfo.Enemy_Lance);		// 香車
 	}
 
-	private void OnPressedSquare(Square pressedSquare)
+	private async void OnPressedSquare(Square pressedSquare)
 	{
 		if (m_PieceMoveInfo.IsSelecting)
 		{
@@ -111,9 +111,9 @@ public class Board : MonoBehaviour
 			PutPiece(pressedSquare, out isNextEnemyTurn);
 			if (isNextEnemyTurn)
 			{
-				// TODO: 敵の手
-				// await Task.Delay(500);
-				// m_EnemyAI.PutPiece(m_Board);
+				// 敵AIの手を打つ
+				await Task.Delay(300);
+				m_EnemyAI.PutPiece(m_Board);
 			}
 		}
 		else

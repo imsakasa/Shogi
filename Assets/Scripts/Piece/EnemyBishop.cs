@@ -17,4 +17,9 @@ public class EnemyBishop : EnemyPieceBase
 	{
 		return PieceUtility.CalcForeverMoveRange(board, from, MOVE_RANGE);
 	}
+
+	public override int GetPieceValue()
+	{
+		return PieceDefine.PieceValue.Bishop;
+	}
 }

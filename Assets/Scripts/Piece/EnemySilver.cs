@@ -17,4 +17,9 @@ public class EnemySilver : EnemyPieceBase
 		var validRanges = ranges.Where(pos => pos.IsValid() && !board[pos.X, pos.Y].IsEnemy()).ToList();
 		return validRanges;
 	}
+
+	public override int GetPieceValue()
+	{
+		return PieceDefine.PieceValue.Silver;
+	}
 }

@@ -14,4 +14,9 @@ public class EnemyLance : EnemyPieceBase
 	{
 		return PieceUtility.CalcForeverMoveRange(board, from, MOVE_RANGE);
 	}
+
+	public override int GetPieceValue()
+	{
+		return PieceDefine.PieceValue.Lance;
+	}
 }

@@ -6,33 +6,19 @@ public class EnemyAI
 {
 	public void PutPiece(Square[,] board)
 	{
-		PieceMoveInfo moveInfo = GetMoveInfo(board);
+		BestHandInfo bestHand = ThinkBestHand(board);
 
-		var moveFromSquare = moveInfo.SelectingSquare;
-		var moveToSquare = board[moveInfo.MoveTo.X, moveInfo.MoveTo.Y];
+		var moveFromSquare = bestHand.MoveInfo.SelectingSquare;
+		var moveToSquare = board[bestHand.MoveInfo.MoveTo.X, bestHand.MoveInfo.MoveTo.Y];
 
 		moveToSquare.SetPieceInfo(moveFromSquare.PieceInfo);
 		moveFromSquare.ResetPieceInfo();
 	}
 
-	private PieceMoveInfo GetMoveInfo(Square[,] board)
+	private BestHandInfo ThinkBestHand(Square[,] board)
 	{
-		PieceMoveInfo moveInfo = new PieceMoveInfo();
-
-		Square moveFrom = CalcMoveFromSquare(board);
-		Square moveTo = CalcMoveToSquare(board, moveFrom);
-
-		moveInfo.SetMoveFrom(moveFrom);
-		moveInfo.SetMoveTo(moveTo.Address);
-
-		return moveInfo;
-	}
-
-	private PieceMoveInfo ThinkMoveSquare(Square[,] board)
-	{
-		PieceMoveInfo moveInfo = new PieceMoveInfo();
-
 		BestHandInfo bestHandInfo = new BestHandInfo();
+
 		for (int x = 1; x < Board.BOARD_WIDTH - 1; x++)
 		{
 			for (int y = 1; y < Board.BOARD_WIDTH - 1; y++)
@@ -43,25 +29,30 @@ public class EnemyAI
 				EnemyPieceBase enemyPiece = PieceUtility.CreateEnemyPiece(square.PieceInfo);
 				if (enemyPiece == null) continue;
 
+				var bestHand = enemyPiece.GetBestHand(board, square.Address);
+				if (bestHandInfo.MaxPieceValue > bestHand.MaxPieceValue)
+				{
+					bestHandInfo = bestHand;
+				}
+				else if (bestHandInfo.MaxPieceValue == bestHand.MaxPieceValue)
+				{
+					if (bestHandInfo.MyPieceValue > bestHand.MyPieceValue)
+					{
+						bestHandInfo = bestHand;
+					}
+				}
 			}
 		}
 
-		return moveInfo;
-	}
-
-	private Square CalcMoveFromSquare(Square[,] board)
-	{
-		return board[1, 3];
-	}
-
-	private Square CalcMoveToSquare(Square[,] board, Square from)
-	{
-		return board[1, 4];
+		return bestHandInfo;
 	}
 }
 
 public class BestHandInfo
 {
-	int MaxMoveValue;
-	PieceMoveInfo MoveInfo = new PieceMoveInfo();
+	private static readonly int MAX_MY_PIECE_VALUE = 10001;
+
+	public int MaxPieceValue;
+	public int MyPieceValue = MAX_MY_PIECE_VALUE;
+	public PieceMoveInfo MoveInfo = new PieceMoveInfo();
 }

@@ -63,7 +63,7 @@ public class PieceDefine
 		public static int PromotedPawn = 1160;		// と金
 	}
 
-	public static int GetPieceValue(PieceInfo pieceInfo, bool isAcquiredPiece)
+	public static int GetPieceValue(PieceInfo pieceInfo, bool isAcquiredPiece = false)
 	{
 		int pieceValue = 0;
 		switch (pieceInfo)
