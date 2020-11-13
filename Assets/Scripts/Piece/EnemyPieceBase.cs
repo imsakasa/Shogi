@@ -17,14 +17,13 @@ public abstract class EnemyPieceBase
 
 		foreach (var moveTo in moveRanges)
 		{
-			var square = board[moveTo.X, moveTo.Y];
-			PieceInfo pieceInfo = square.PieceInfo;
+			PieceInfo pieceInfo = board[moveTo.X, moveTo.Y].PieceInfo;
 			int pieceValue = PieceDefine.GetPieceValue(pieceInfo);
 			// TODO: 空のマスにも移動できるように >= の = も付けているが、それでいいのか再検討
 			if (pieceValue >= bestHandInfo.MaxPieceValue)
 			{
 				bestHandInfo.MaxPieceValue = pieceValue;
-				bestHandInfo.MoveInfo.SetMoveTo(square.Address);
+				bestHandInfo.MoveInfo.SetMoveTo(moveTo);
 			}
 		}
 

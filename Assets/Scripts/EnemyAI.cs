@@ -30,11 +30,11 @@ public class EnemyAI
 				if (enemyPiece == null) continue;
 
 				var bestHand = enemyPiece.GetBestHand(board, square.Address);
-				if (bestHandInfo.MaxPieceValue > bestHand.MaxPieceValue)
+				if (bestHand.MaxPieceValue > bestHandInfo.MaxPieceValue)
 				{
 					bestHandInfo = bestHand;
 				}
-				else if (bestHandInfo.MaxPieceValue == bestHand.MaxPieceValue)
+				else if (bestHand.MaxPieceValue == bestHandInfo.MaxPieceValue)
 				{
 					if (bestHandInfo.MyPieceValue > bestHand.MyPieceValue)
 					{
