@@ -5,7 +5,7 @@ using System.Linq;
 /// <summary>
 /// 竜王(成り飛車)
 /// </summary>
-public class PromotedRoook : PieceBase
+public class PromotedRook : PieceBase
 {
 	public override bool CanMove(Board board, PieceMoveInfo moveInfo)
 	{

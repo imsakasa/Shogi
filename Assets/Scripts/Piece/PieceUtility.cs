@@ -52,7 +52,7 @@ public static class PieceUtility
 			case PieceInfo.Knight: return new Knight();
 			case PieceInfo.Lance: return new Lance();
 			case PieceInfo.Pawn: return new Pawn();
-			case PieceInfo.Pro_Rook: return new PromotedRoook();
+			case PieceInfo.Pro_Rook: return new PromotedRook();
 			case PieceInfo.Pro_Bishop: return new PromotedBishop();
 			case PieceInfo.Pro_Silver: return new PromotedSilver();
 			case PieceInfo.Pro_Knight: return new PromotedKnight();
