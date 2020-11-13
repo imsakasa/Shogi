@@ -3,11 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IEnemyPiece
-{
-	List<Address> MoveRanges(Board board, Address from);
-}
-
 public struct Address
 {
 	public static readonly Address INVALID_ADDRESS = new Address(-1, -1);

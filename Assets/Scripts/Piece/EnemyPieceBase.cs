@@ -4,5 +4,5 @@ using UnityEngine;
 
 public abstract class EnemyPieceBase
 {
-	public abstract List<Address> MoveRanges(Board board, Address from);
+	public abstract List<Address> MoveRanges(Square[,] board, Address from);
 }

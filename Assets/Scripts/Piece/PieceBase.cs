@@ -4,6 +4,6 @@ using UnityEngine;
 
 public abstract class PieceBase
 {
-	public abstract bool CanMove(Board board, PieceMoveInfo moveInfo);
-	public abstract List<Address> MoveRanges(Board board, Address from);
+	public abstract bool CanMove(Square[,] board, PieceMoveInfo moveInfo);
+	public abstract List<Address> MoveRanges(Square[,] board, Address from);
 }

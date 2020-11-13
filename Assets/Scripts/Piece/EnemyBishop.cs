@@ -13,7 +13,7 @@ public class EnemyBishop : EnemyPieceBase
 		new Address(1, -1),
 	};
 
-	public override List<Address> MoveRanges(Board board, Address from)
+	public override List<Address> MoveRanges(Square[,] board, Address from)
 	{
 		return PieceUtility.CalcForeverMoveRange(board, from, MOVE_RANGE);
 	}

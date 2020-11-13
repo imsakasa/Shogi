@@ -5,7 +5,7 @@ using System.Linq;
 
 public static class PieceUtility
 {
-	public static List<Address> CalcForeverMoveRange(Board board, Address from, IReadOnlyList<Address> defineRanges)
+	public static List<Address> CalcForeverMoveRange(Square[,] board, Address from, IReadOnlyList<Address> defineRanges)
 	{
 		var ranges = new List<Address>();
 
@@ -14,7 +14,7 @@ public static class PieceUtility
 		while (true)
 		{
 			tmpAddress += defineRanges[defineRangeIndex];
-			var square = board.GetSquare(tmpAddress);
+			var square = board[tmpAddress.X, tmpAddress.Y];
 			bool canAddAddress = tmpAddress.IsValid() && !square.IsSelf();
 			if (canAddAddress)
 			{
@@ -58,6 +58,23 @@ public static class PieceUtility
 			case PieceInfo.Pro_Knight: return new PromotedKnight();
 			case PieceInfo.Pro_Lance: return new PromotedLance();
 			case PieceInfo.Pro_Pawn: return new PromotedPawn();
+			default:
+				return null;
+		}
+	}
+
+	public static EnemyPieceBase CreateEnemyPiece(PieceInfo pieceInfo)
+	{
+		switch (pieceInfo)
+		{
+			case PieceInfo.Enemy_King: return new EnemyKing();
+			case PieceInfo.Enemy_Rook: return new EnemyRook();
+			case PieceInfo.Enemy_Bishop: return new EnemyBishop();
+			case PieceInfo.Enemy_Gold: return new EnemyGold();
+			case PieceInfo.Enemy_Silver: return new EnemySilver();
+			case PieceInfo.Enemy_Knight: return new EnemyKnight();
+			case PieceInfo.Enemy_Lance: return new EnemyLance();
+			case PieceInfo.Enemy_Pawn: return new EnemyPawn();
 			default:
 				return null;
 		}

@@ -203,7 +203,7 @@ public class Board : MonoBehaviour
 		}
 
 		PieceBase piece = PieceUtility.CreatePiece(selectingSquare.PieceInfo);
-		if (!piece.CanMove(this, m_PieceMoveInfo))
+		if (!piece.CanMove(m_Board, m_PieceMoveInfo))
 		{
 			return false;
 		}
