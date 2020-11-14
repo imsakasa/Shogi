@@ -10,7 +10,6 @@ public abstract class EnemyPieceBase
 	public BestHandInfo GetBestHand(Square[,] board, Address moveFrom)
 	{
 		BestHandInfo bestHandInfo = new BestHandInfo();
-		bestHandInfo.MyPieceValue = GetPieceValue();
 		bestHandInfo.MoveInfo.SetMoveFrom(board[moveFrom.X, moveFrom.Y]);
 
 		var moveRanges = MoveRanges(board, moveFrom);

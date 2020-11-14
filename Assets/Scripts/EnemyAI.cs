@@ -17,7 +17,8 @@ public class EnemyAI
 
 	private BestHandInfo ThinkBestHand(Square[,] board)
 	{
-		BestHandInfo bestHandInfo = new BestHandInfo();
+		var bestHandInfoList = new List<BestHandInfo>();
+		bestHandInfoList.Add(new BestHandInfo());
 
 		for (int x = 1; x < Board.BOARD_WIDTH - 1; x++)
 		{
@@ -30,29 +31,24 @@ public class EnemyAI
 				if (enemyPiece == null) continue;
 
 				var bestHand = enemyPiece.GetBestHand(board, square.Address);
-				if (bestHand.MaxPieceValue > bestHandInfo.MaxPieceValue)
+				if (bestHand.MaxPieceValue > bestHandInfoList[0].MaxPieceValue)
 				{
-					bestHandInfo = bestHand;
+					bestHandInfoList.Clear();
+					bestHandInfoList.Add(bestHand);
 				}
-				else if (bestHand.MaxPieceValue == bestHandInfo.MaxPieceValue)
+				else if (bestHand.MaxPieceValue == bestHandInfoList[0].MaxPieceValue)
 				{
-					if (bestHandInfo.MyPieceValue > bestHand.MyPieceValue)
-					{
-						bestHandInfo = bestHand;
-					}
+					bestHandInfoList.Add(bestHand);
 				}
 			}
 		}
 
-		return bestHandInfo;
+		return bestHandInfoList[Random.Range(0, bestHandInfoList.Count)];
 	}
 }
 
 public class BestHandInfo
 {
-	private static readonly int MAX_MY_PIECE_VALUE = 10001;
-
 	public int MaxPieceValue;
-	public int MyPieceValue = MAX_MY_PIECE_VALUE;
 	public PieceMoveInfo MoveInfo = new PieceMoveInfo();
 }
