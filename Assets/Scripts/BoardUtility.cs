@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -20,5 +21,13 @@ public static class BoardUtility
 	public static bool IsEnemyArea(Address targetAddress)
 	{
 		return targetAddress.Y <= ENEMY_RANGE_THRESHOLD;
+	}
+
+	public static Square[,] CreateCopyBoard(Square[,] sourceBoard)
+	{
+		Square[,] copyBoard = new Square[Board.BOARD_WIDTH, Board.BOARD_WIDTH];
+		Array.Copy(sourceBoard, copyBoard, sourceBoard.Length);
+
+		return copyBoard;
 	}
 }
