@@ -5,7 +5,7 @@ using System.Linq;
 
 public static class PieceUtility
 {
-	public static List<Address> CalcForeverMoveRange(Square[,] board, Address from, IReadOnlyList<Address> defineRanges)
+	public static List<Address> CalcForeverMoveRange(Square[][] board, Address from, IReadOnlyList<Address> defineRanges)
 	{
 		var ranges = new List<Address>();
 
@@ -14,7 +14,7 @@ public static class PieceUtility
 		while (true)
 		{
 			tmpAddress += defineRanges[defineRangeIndex];
-			var square = board[tmpAddress.X, tmpAddress.Y];
+			var square = board[tmpAddress.X][tmpAddress.Y];
 			bool canAddAddress = tmpAddress.IsValid() && !square.IsSelf();
 			if (canAddAddress)
 			{
@@ -40,7 +40,7 @@ public static class PieceUtility
 		addresses.Where(address => !board.GetSquare(address).IsSelf()).ToList();
 	}
 
-	public static PieceBase CreatePiece(PieceInfo pieceInfo)
+	public static PlayerPieceBase CreatePiece(PieceInfo pieceInfo)
 	{
 		switch (pieceInfo)
 		{

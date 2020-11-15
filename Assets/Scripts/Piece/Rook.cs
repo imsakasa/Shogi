@@ -6,7 +6,7 @@ using UnityEngine;
 /// <summary>
 /// 飛車
 /// </summary>
-public class Rook : PieceBase
+public class Rook : PlayerPieceBase
 {
 	public static IReadOnlyList<Address> MOVE_RANGE = new List<Address>
 	{
@@ -16,13 +16,13 @@ public class Rook : PieceBase
 		new Address(-1, 0),
 	};
 
-	public override bool CanMove(Square[,] board, PieceMoveInfo moveInfo)
+	public override bool CanMove(Square[][] board, PieceMoveInfo moveInfo)
 	{
 		var moveRanges = MoveRanges(board, moveInfo.MoveFrom);
 		return moveRanges.Any(address => address == moveInfo.MoveTo);
 	}
 
-	public override List<Address> MoveRanges(Square[,] board, Address from)
+	public override List<Address> MoveRanges(Square[][] board, Address from)
 	{
 		return PieceUtility.CalcForeverMoveRange(board, from, MOVE_RANGE);
 	}

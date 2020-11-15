@@ -68,21 +68,61 @@ public class PieceDefine
 		int pieceValue = 0;
 		switch (pieceInfo)
 		{
-			case PieceInfo.King: pieceValue += PieceValue.King; break;
-			case PieceInfo.Rook: pieceValue += PieceValue.Rook; break;
-			case PieceInfo.Bishop: pieceValue += PieceValue.Bishop; break;
-			case PieceInfo.Gold: pieceValue += PieceValue.Gold; break;
-			case PieceInfo.Silver: pieceValue += PieceValue.Silver; break;
-			case PieceInfo.Knight: pieceValue += PieceValue.Knight; break;
-			case PieceInfo.Lance: pieceValue += PieceValue.Lance; break;
-			case PieceInfo.Pawn: pieceValue += PieceValue.Pawn; break;
+			case PieceInfo.King:
+			case PieceInfo.Enemy_King:
+				pieceValue += PieceValue.King; break;
 
-			case PieceInfo.Pro_Rook: pieceValue += PieceValue.PromotedRook; break;
-			case PieceInfo.Pro_Bishop: pieceValue += PieceValue.PromotedBishop; break;
-			case PieceInfo.Pro_Silver: pieceValue += PieceValue.PromotedSilver; break;
-			case PieceInfo.Pro_Knight: pieceValue += PieceValue.PromotedKnight; break;
-			case PieceInfo.Pro_Lance: pieceValue += PieceValue.PromotedLance; break;
-			case PieceInfo.Pro_Pawn: pieceValue += PieceValue.PromotedPawn; break;
+			case PieceInfo.Rook:
+			case PieceInfo.Enemy_Rook:
+				pieceValue += PieceValue.Rook; break;
+
+			case PieceInfo.Bishop:
+			case PieceInfo.Enemy_Bishop:
+				pieceValue += PieceValue.Bishop; break;
+
+			case PieceInfo.Gold:
+			case PieceInfo.Enemy_Gold:
+				pieceValue += PieceValue.Gold; break;
+
+			case PieceInfo.Silver:
+			case PieceInfo.Enemy_Silver:
+				pieceValue += PieceValue.Silver; break;
+
+			case PieceInfo.Knight:
+			case PieceInfo.Enemy_Knight:
+			pieceValue += PieceValue.Knight; break;
+
+			case PieceInfo.Lance:
+			case PieceInfo.Enemy_Lance:
+				pieceValue += PieceValue.Lance; break;
+
+			case PieceInfo.Pawn:
+			case PieceInfo.Enemy_Pawn:
+				pieceValue += PieceValue.Pawn; break;
+
+			case PieceInfo.Pro_Rook:
+			case PieceInfo.Enemy_Pro_Rook:
+			pieceValue += PieceValue.PromotedRook; break;
+			
+			case PieceInfo.Pro_Bishop:
+			case PieceInfo.Enemy_Pro_Bishop:
+			pieceValue += PieceValue.PromotedBishop; break;
+
+			case PieceInfo.Pro_Silver:
+			case PieceInfo.Enemy_Pro_Silver:
+			pieceValue += PieceValue.PromotedSilver; break;
+
+			case PieceInfo.Pro_Knight:
+			case PieceInfo.Enemy_Pro_Knight:
+			pieceValue += PieceValue.PromotedKnight; break;
+
+			case PieceInfo.Pro_Lance:
+			case PieceInfo.Enemy_Pro_Lance:
+			pieceValue += PieceValue.PromotedLance; break;
+
+			case PieceInfo.Pro_Pawn:
+			case PieceInfo.Enemy_Pro_Pawn:
+			pieceValue += PieceValue.PromotedPawn; break;
 		}
 
 		if (isAcquiredPiece)
