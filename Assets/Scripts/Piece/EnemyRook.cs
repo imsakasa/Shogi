@@ -13,7 +13,7 @@ public class EnemyRook : EnemyPieceBase
 		new Address(-1, 0),
 	};
 
-	public override List<Address> MoveRanges(Square[][] board, Address from)
+	public override List<Address> MoveRanges(Square[,] board, Address from)
 	{
 		return PieceUtility.CalcForeverMoveRange(board, from, MOVE_RANGE);
 	}

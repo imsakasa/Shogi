@@ -23,9 +23,9 @@ public static class BoardUtility
 		return targetAddress.Y <= ENEMY_RANGE_THRESHOLD;
 	}
 
-	public static Square[][] CreateCopyBoard(Square[][] sourceBoard)
+	public static Square[,] CreateCopyBoard(Square[,] sourceBoard)
 	{
-		Square[][] copyBoard = new Square[][] { new Square[Board.BOARD_WIDTH], new Square[Board.BOARD_WIDTH] };
+		Square[,] copyBoard = new Square[Board.BOARD_WIDTH, Board.BOARD_WIDTH];
 		Array.Copy(sourceBoard, copyBoard, sourceBoard.Length);
 
 		return copyBoard;

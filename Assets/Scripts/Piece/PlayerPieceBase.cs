@@ -4,5 +4,5 @@ using UnityEngine;
 
 public abstract class PlayerPieceBase : PieceBase
 {
-	public abstract bool CanMove(Square[][] board, PieceMoveInfo moveInfo);
+	public abstract bool CanMove(Square[,] board, PieceMoveInfo moveInfo);
 }

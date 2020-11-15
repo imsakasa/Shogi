@@ -7,13 +7,13 @@ using System.Linq;
 /// </summary>
 public class PromotedRook : PlayerPieceBase
 {
-	public override bool CanMove(Square[][] board, PieceMoveInfo moveInfo)
+	public override bool CanMove(Square[,] board, PieceMoveInfo moveInfo)
 	{
 		var moveRanges = MoveRanges(board, moveInfo.MoveFrom);
 		return moveRanges.Any(address => address == moveInfo.MoveTo);
 	}
 
-	public override List<Address> MoveRanges(Square[][] board, Address from)
+	public override List<Address> MoveRanges(Square[,] board, Address from)
 	{
 		var rookRanges = PieceUtility.CalcForeverMoveRange(board, from, Rook.MOVE_RANGE);
 

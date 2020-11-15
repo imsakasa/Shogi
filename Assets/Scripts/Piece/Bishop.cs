@@ -16,13 +16,13 @@ public class Bishop : PlayerPieceBase
 		new Address(1, -1),
 	};
 
-	public override bool CanMove(Square[][] board, PieceMoveInfo moveInfo)
+	public override bool CanMove(Square[,] board, PieceMoveInfo moveInfo)
 	{
 		var moveRanges = MoveRanges(board, moveInfo.MoveFrom);
 		return moveRanges.Any(address => address == moveInfo.MoveTo);
 	}
 
-	public override List<Address> MoveRanges(Square[][] board, Address from)
+	public override List<Address> MoveRanges(Square[,] board, Address from)
 	{
 		return PieceUtility.CalcForeverMoveRange(board, from, MOVE_RANGE);
 	}

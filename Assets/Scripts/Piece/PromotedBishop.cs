@@ -7,13 +7,13 @@ using System.Linq;
 /// </summary>
 public class PromotedBishop : PlayerPieceBase
 {
-	public override bool CanMove(Square[][] board, PieceMoveInfo moveInfo)
+	public override bool CanMove(Square[,] board, PieceMoveInfo moveInfo)
 	{
 		var moveRanges = MoveRanges(board, moveInfo.MoveFrom);
 		return moveRanges.Any(address => address == moveInfo.MoveTo);
 	}
 
-	public override List<Address> MoveRanges(Square[][] board, Address from)
+	public override List<Address> MoveRanges(Square[,] board, Address from)
 	{
 		var bishopRanges = PieceUtility.CalcForeverMoveRange(board, from, Bishop.MOVE_RANGE);
 

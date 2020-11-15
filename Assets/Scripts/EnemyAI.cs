@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class EnemyAI
 {
-	private Square[][] m_Board;
-	public void PutPiece(Square[][] board)
+	private Square[,] m_Board;
+	public void PutPiece(Square[,] board)
 	{
 		m_Board = BoardUtility.CreateCopyBoard(board);
-		Debug.LogError("==前=board::"+board[5][1].PieceInfo+"==");
-		m_Board[5][1].SetPieceInfo(PieceInfo.Empty);
-		Debug.LogError("==後=board::"+board[5][1].PieceInfo+"==");
+		Debug.LogError("==前=board::"+board[5, 1].PieceInfo+"==");
+		m_Board[5, 1].SetPieceInfo(PieceInfo.Empty);
+		Debug.LogError("==後=board::"+board[5, 1].PieceInfo+"==");
 
 		// Debug.LogError("==前=board::"+board[5,1].PieceInfo+"==");
 		BestHandInfo bestHand = AlphaBetaMax(level: 1, alpha: 0, beta: 999999);
@@ -18,13 +18,13 @@ public class EnemyAI
 
 		var moveFromSquare = bestHand.MoveInfo.SelectingSquare;
 		Debug.LogError("===MoveFrom::"+bestHand.MoveInfo.MoveFrom+"==MoveTo::"+bestHand.MoveInfo.MoveTo+"==");
-		var moveToSquare = board[bestHand.MoveInfo.MoveTo.X][bestHand.MoveInfo.MoveTo.Y];
+		var moveToSquare = board[bestHand.MoveInfo.MoveTo.X, bestHand.MoveInfo.MoveTo.Y];
 
 		moveToSquare.SetPieceInfo(moveFromSquare.PieceInfo);
 		moveFromSquare.ResetPieceInfo();
 	}
 
-	private BestHandInfo ThinkBestAIHand(Square[][] board)
+	private BestHandInfo ThinkBestAIHand(Square[,] board)
 	{
 		var bestHandInfoList = new List<BestHandInfo>();
 		bestHandInfoList.Add(new BestHandInfo());
@@ -33,7 +33,7 @@ public class EnemyAI
 		{
 			for (int y = 1; y < Board.BOARD_WIDTH - 1; y++)
 			{
-				Square square = board[x][y];
+				Square square = board[x, y];
 				EnemyPieceBase enemyPiece = GetSquareEnemyPiece(square);
 				if (enemyPiece == null) continue;
 
@@ -57,7 +57,7 @@ public class EnemyAI
 		return bestHandInfoList[Random.Range(0, bestHandInfoList.Count)];
 	}
 
-	private BestHandInfo ThinkBestPlayerHand(Square[][] board)
+	private BestHandInfo ThinkBestPlayerHand(Square[,] board)
 	{
 		var bestHandInfoList = new List<BestHandInfo>();
 		bestHandInfoList.Add(new BestHandInfo());
@@ -66,7 +66,7 @@ public class EnemyAI
 		{
 			for (int y = 1; y < Board.BOARD_WIDTH - 1; y++)
 			{
-				Square square = board[x][y];
+				Square square = board[x, y];
 				PieceBase playerPiece = GetSquarePlayerPiece(square);
 				if (playerPiece == null) continue;
 
@@ -109,8 +109,8 @@ public class EnemyAI
 			int score = 0;
 			var saveBoard = BoardUtility.CreateCopyBoard(m_Board);
 			// AIの手を打つ
-			m_Board[hand.MoveFrom.X][hand.MoveFrom.Y].SetPieceInfo(PieceInfo.Empty);
-			m_Board[hand.MoveTo.X][hand.MoveTo.Y].SetPieceInfo(hand.PieceInfo);
+			m_Board[hand.MoveFrom.X, hand.MoveFrom.Y].SetPieceInfo(PieceInfo.Empty);
+			m_Board[hand.MoveTo.X, hand.MoveTo.Y].SetPieceInfo(hand.PieceInfo);
 
 			// 次の相手の手
 			score = AlphaBetaMin(level - 1, alpha, beta).ScoreMin;
@@ -131,7 +131,7 @@ public class EnemyAI
 				// より良い手が見つかった
 				bestHand.ScoreMax = score;
 				alpha = Mathf.Max(alpha, bestHand.ScoreMax);
-				bestHand.MoveInfo.SetMoveFrom(m_Board[hand.MoveFrom.X][hand.MoveFrom.Y]);
+				bestHand.MoveInfo.SetMoveFrom(m_Board[hand.MoveFrom.X, hand.MoveFrom.Y]);
 				bestHand.MoveInfo.SetMoveTo(hand.MoveTo);
 			}
 		}
@@ -160,8 +160,8 @@ public class EnemyAI
 			int score = 0;
 			var saveBoard = BoardUtility.CreateCopyBoard(m_Board);
 			// プレイヤーの手を打つ
-			m_Board[hand.MoveFrom.X][hand.MoveFrom.Y].SetPieceInfo(PieceInfo.Empty);
-			m_Board[hand.MoveTo.X][hand.MoveTo.Y].SetPieceInfo(hand.PieceInfo);
+			m_Board[hand.MoveFrom.X, hand.MoveFrom.Y].SetPieceInfo(PieceInfo.Empty);
+			m_Board[hand.MoveTo.X, hand.MoveTo.Y].SetPieceInfo(hand.PieceInfo);
 
 			// 次のAIの手
 			score = AlphaBetaMax(level - 1, alpha, beta).ScoreMax;
@@ -180,7 +180,7 @@ public class EnemyAI
 				Debug.LogError("=より良い手が見つかった==score::"+score+"=ScoreMin::"+bestHand.ScoreMin+"=");
 				bestHand.ScoreMin = score;
 				beta = Mathf.Min(beta, bestHand.ScoreMin);
-				bestHand.MoveInfo.SetMoveFrom(m_Board[hand.MoveFrom.X][hand.MoveFrom.Y]);
+				bestHand.MoveInfo.SetMoveFrom(m_Board[hand.MoveFrom.X, hand.MoveFrom.Y]);
 				bestHand.MoveInfo.SetMoveTo(hand.MoveTo);
 			}
 		}
@@ -188,14 +188,14 @@ public class EnemyAI
 		return bestHand;
 	}
 
-	private List<HandInfo> GetAllAIHandList(Square[][] board)
+	private List<HandInfo> GetAllAIHandList(Square[,] board)
 	{
 		var handList = new List<HandInfo>();
 
 		for (int x = 1; x < Board.BOARD_WIDTH - 1; x++)
 		for (int y = 1; y < Board.BOARD_WIDTH - 1; y++)
 		{
-			Square square = board[x][y];
+			Square square = board[x, y];
 			EnemyPieceBase enemyPiece = GetSquareEnemyPiece(square);
 			if (enemyPiece == null) continue;
 
@@ -213,14 +213,14 @@ public class EnemyAI
 		return handList;
 	}
 
-	private List<HandInfo> GetAllPlayerHandList(Square[][] board)
+	private List<HandInfo> GetAllPlayerHandList(Square[,] board)
 	{
 		var handList = new List<HandInfo>();
 
 		for (int x = 1; x < Board.BOARD_WIDTH - 1; x++)
 		for (int y = 1; y < Board.BOARD_WIDTH - 1; y++)
 		{
-			Square square = board[x][y];
+			Square square = board[x, y];
 			PieceBase playerPiece = GetSquarePlayerPiece(square);
 			if (playerPiece == null) continue;
 
@@ -238,9 +238,9 @@ public class EnemyAI
 		return handList;
 	}
 
-	// private BestHandInfo ThinkBestHandAfterThreeMove(Square[][] board)
+	// private BestHandInfo ThinkBestHandAfterThreeMove(Square[,] board)
 	// {
-	// 	Square[][] copyBoard = BoardUtility.CreateCopyBoard(board);
+	// 	Square[,] copyBoard = BoardUtility.CreateCopyBoard(board);
 
 	// 	// 1手先:自分(敵AI)の手を探索
 	// 	for (int x = 1; x < Board.BOARD_WIDTH - 1; x++)
@@ -258,7 +258,7 @@ public class EnemyAI
 	// 		for (int yy = 1; yy < Board.BOARD_WIDTH - 1; yy++)
 	// 		{
 	// 			var range = moveRanges[i];
-	// 			Square[][] copyBoard2 = BoardUtility.CreateCopyBoard(copyBoard);
+	// 			Square[,] copyBoard2 = BoardUtility.CreateCopyBoard(copyBoard);
 	// 			copyBoard2[xx, yy].SetPieceInfo(square.PieceInfo);
 
 	// 			// 駒の1手先の移動に対して、相手の移動先を探索
