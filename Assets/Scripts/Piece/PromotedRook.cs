@@ -15,7 +15,7 @@ public class PromotedRook : PlayerPieceBase
 
 	public override List<Address> MoveRanges(Square[,] board, Address from)
 	{
-		var rookRanges = PieceUtility.CalcForeverMoveRange(board, from, Rook.MOVE_RANGE);
+		var rookRanges = PieceUtility.CalcForeverMovePlayerRange(board, from, Rook.MOVE_RANGE);
 
 		var promotedRanges = new List<Address>();
 		promotedRanges.Add(new Address(from.X - 1, from.Y - 1));

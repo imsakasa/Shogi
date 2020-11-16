@@ -15,7 +15,7 @@ public class PromotedBishop : PlayerPieceBase
 
 	public override List<Address> MoveRanges(Square[,] board, Address from)
 	{
-		var bishopRanges = PieceUtility.CalcForeverMoveRange(board, from, Bishop.MOVE_RANGE);
+		var bishopRanges = PieceUtility.CalcForeverMovePlayerRange(board, from, Bishop.MOVE_RANGE);
 
 		var promotedRanges = new List<Address>();
 		promotedRanges.Add(new Address(from.X, from.Y - 1));

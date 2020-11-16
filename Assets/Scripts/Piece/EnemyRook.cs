@@ -15,6 +15,6 @@ public class EnemyRook : EnemyPieceBase
 
 	public override List<Address> MoveRanges(Square[,] board, Address from)
 	{
-		return PieceUtility.CalcForeverMoveRange(board, from, MOVE_RANGE);
+		return PieceUtility.CalcForeverMoveEnemyRange(board, from, MOVE_RANGE);
 	}
 }

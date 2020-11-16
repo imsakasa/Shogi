@@ -21,6 +21,6 @@ public class Lance : PlayerPieceBase
 
 	public override List<Address> MoveRanges(Square[,] board, Address from)
 	{
-		return PieceUtility.CalcForeverMoveRange(board, from, MOVE_RANGE);
+		return PieceUtility.CalcForeverMovePlayerRange(board, from, MOVE_RANGE);
 	}
 }

@@ -52,10 +52,10 @@ public class EnemyAI
 		return bestHandInfoList[Random.Range(0, bestHandInfoList.Count)];
 	}
 
-	private BestHandInfo ThinkBestPlayerHand(Square[,] board)
+	private BestHandInfo ThinkWorstPlayerHand(Square[,] board)
 	{
-		var bestHandInfoList = new List<BestHandInfo>();
-		bestHandInfoList.Add(new BestHandInfo());
+		var worstHandInfoList = new List<BestHandInfo>();
+		worstHandInfoList.Add(new BestHandInfo());
 
 		for (int x = 1; x < Board.BOARD_WIDTH - 1; x++)
 		{
@@ -65,24 +65,24 @@ public class EnemyAI
 				PieceBase playerPiece = GetSquarePlayerPiece(square);
 				if (playerPiece == null) continue;
 
-				var bestHand = playerPiece.GetBestHand(board, square.Address);
-				if (!bestHand.MoveInfo.MoveTo.IsValid())
+				var worstHand = playerPiece.GetWorstHand(board, square.Address);
+				if (!worstHand.MoveInfo.MoveTo.IsValid())
 				{
 					continue;
 				}
-				if (bestHand.ScoreMax > bestHandInfoList[0].ScoreMax)
+				if (worstHand.ScoreMin < worstHandInfoList[0].ScoreMin)
 				{
-					bestHandInfoList.Clear();
-					bestHandInfoList.Add(bestHand);
+					worstHandInfoList.Clear();
+					worstHandInfoList.Add(worstHand);
 				}
-				else if (bestHand.ScoreMax == bestHandInfoList[0].ScoreMax)
+				else if (worstHand.ScoreMin == worstHandInfoList[0].ScoreMin)
 				{
-					bestHandInfoList.Add(bestHand);
+					worstHandInfoList.Add(worstHand);
 				}
 			}
 		}
 
-		return bestHandInfoList[Random.Range(0, bestHandInfoList.Count)];
+		return worstHandInfoList[Random.Range(0, worstHandInfoList.Count)];
 	}
 
 	/// <summary>
@@ -141,9 +141,7 @@ public class EnemyAI
 	{
 		if (level == 0)
 		{
-			BestHandInfo best = ThinkBestPlayerHand(m_Board);
-			return best;
-			// return ThinkBestPlayerHand(m_Board); // 現在の局面の評価
+			return ThinkWorstPlayerHand(m_Board); // 現在の局面の評価
 		}
 
 		// プレイヤーの可能な手を全て取得
@@ -172,7 +170,7 @@ public class EnemyAI
 
 			if (score < bestHand.ScoreMin)
 			{
-				Debug.LogError("=より良い手が見つかった==score::"+score+"=ScoreMin::"+bestHand.ScoreMin+"=");
+				Debug.LogError("=より悪い手が見つかった==score::"+score+"=ScoreMin::"+bestHand.ScoreMin+"=");
 				bestHand.ScoreMin = score;
 				beta = Mathf.Min(beta, bestHand.ScoreMin);
 				bestHand.MoveInfo.SetMoveFrom(m_Board[hand.MoveFrom.X, hand.MoveFrom.Y]);
