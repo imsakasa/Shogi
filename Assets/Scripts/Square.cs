@@ -35,6 +35,8 @@ public class Square : MonoBehaviour
 		m_OnPressed = onPressed;
 	}
 
+	public void SetPieceInfoSimple(PieceInfo info) => PieceInfo = info;
+
 	public void SetPieceInfo(PieceInfo info)
 	{
 		PieceInfo = info;
