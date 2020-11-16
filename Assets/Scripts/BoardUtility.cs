@@ -26,7 +26,11 @@ public static class BoardUtility
 	public static Square[,] CreateCopyBoard(Square[,] sourceBoard)
 	{
 		Square[,] copyBoard = new Square[Board.BOARD_WIDTH, Board.BOARD_WIDTH];
-		Array.Copy(sourceBoard, copyBoard, sourceBoard.Length);
+		for (int y = 1; y < Board.BOARD_WIDTH - 1; y++)
+		for (int x = 1; x < Board.BOARD_WIDTH - 1; x++)
+		{
+			copyBoard[x, y] = sourceBoard[x, y].DeepCopy();
+		}
 
 		return copyBoard;
 	}

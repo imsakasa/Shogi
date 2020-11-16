@@ -19,6 +19,14 @@ public class Square : MonoBehaviour
 	public PieceInfo PieceInfo { get; private set; }
 	private Action<Square> m_OnPressed;
 
+	public Square DeepCopy()
+	{
+		Square other = (Square)this.MemberwiseClone();
+		other.Address = new Address(Address.X, Address.Y);
+		other.PieceInfo = PieceInfo;
+		return other;
+	}
+
 	public void Setup(Address address, Action<Square> onPressed)
 	{
 		Address = address;
@@ -66,5 +74,5 @@ public class Square : MonoBehaviour
 	public void OnPressed()
 	{
 		m_OnPressed.Invoke(this);
-	} 
+	}
 }

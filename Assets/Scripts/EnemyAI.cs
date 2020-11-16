@@ -8,9 +8,7 @@ public class EnemyAI
 	public void PutPiece(Square[,] board)
 	{
 		m_Board = BoardUtility.CreateCopyBoard(board);
-		Debug.LogError("==前=board::"+board[5, 1].PieceInfo+"==");
 		m_Board[5, 1].SetPieceInfo(PieceInfo.Empty);
-		Debug.LogError("==後=board::"+board[5, 1].PieceInfo+"==");
 
 		// Debug.LogError("==前=board::"+board[5,1].PieceInfo+"==");
 		BestHandInfo bestHand = AlphaBetaMax(level: 1, alpha: 0, beta: 999999);
