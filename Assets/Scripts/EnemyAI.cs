@@ -65,19 +65,19 @@ public class EnemyAI
 				PieceBase playerPiece = GetSquarePlayerPiece(square);
 				if (playerPiece == null) continue;
 
-				var worstHand = playerPiece.GetWorstHand(board, square.Address);
-				if (!worstHand.MoveInfo.MoveTo.IsValid())
+				var bestHand = playerPiece.GetBestHand(board, square.Address);
+				if (!bestHand.MoveInfo.MoveTo.IsValid())
 				{
 					continue;
 				}
-				if (worstHand.ScoreMin < worstHandInfoList[0].ScoreMin)
+				if (bestHand.ScoreMin < worstHandInfoList[0].ScoreMin)
 				{
 					worstHandInfoList.Clear();
-					worstHandInfoList.Add(worstHand);
+					worstHandInfoList.Add(bestHand);
 				}
-				else if (worstHand.ScoreMin == worstHandInfoList[0].ScoreMin)
+				else if (bestHand.ScoreMin == worstHandInfoList[0].ScoreMin)
 				{
-					worstHandInfoList.Add(worstHand);
+					worstHandInfoList.Add(bestHand);
 				}
 			}
 		}
