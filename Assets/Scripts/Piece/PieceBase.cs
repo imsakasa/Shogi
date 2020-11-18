@@ -18,9 +18,9 @@ public abstract class PieceBase
 			PieceInfo pieceInfo = board[moveTo.X, moveTo.Y].PieceInfo;
 			int pieceValue = PieceDefine.GetPieceValue(pieceInfo);
 			// TODO: 空のマスにも移動できるように >= の = も付けているが、それでいいのか再検討
-			if (pieceValue >= bestHandInfo.ScoreMax)
+			if (pieceValue >= bestHandInfo.Score)
 			{
-				bestHandInfo.ScoreMax = pieceValue;
+				bestHandInfo.Score = pieceValue;
 				bestHandInfo.MoveInfo.SetMoveTo(moveTo);
 			}
 		}

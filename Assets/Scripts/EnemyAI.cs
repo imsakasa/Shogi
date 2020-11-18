@@ -9,7 +9,7 @@ public class EnemyAI
 	{
 		m_Board = BoardUtility.CreateCopyBoard(board);
 
-		BestHandInfo bestHand = AlphaBetaMax(level: 1, alpha: 0, beta: 999999);
+		BestHandInfo bestHand = AlphaBetaMax(level: 2, alpha: 0, beta: 999999);
 		Debug.LogError("MoveFrom::"+bestHand.MoveInfo.MoveFrom+" MoveTo:"+bestHand.MoveInfo.MoveTo+"=");
 
 		var moveFromSquare = board[bestHand.MoveInfo.MoveFrom.X, bestHand.MoveInfo.MoveFrom.Y];
@@ -22,7 +22,7 @@ public class EnemyAI
 	private BestHandInfo ThinkBestAIHand(Square[,] board)
 	{
 		var bestHandInfoList = new List<BestHandInfo>();
-		bestHandInfoList.Add(new BestHandInfo());
+		bestHandInfoList.Add(new BestHandInfo { Score = -9999 });
 
 		for (int x = 1; x < Board.BOARD_WIDTH - 1; x++)
 		{
@@ -37,25 +37,29 @@ public class EnemyAI
 				{
 					continue;
 				}
-				if (bestHand.ScoreMax > bestHandInfoList[0].ScoreMax)
+				Debug.LogError("=駒::"+bestHand.MoveInfo.PieceInfo+" MoveTo::"+bestHand.MoveInfo.MoveTo+"==Max::"+bestHand.Score+"==");
+				if (bestHand.Score > bestHandInfoList[0].Score)
 				{
 					bestHandInfoList.Clear();
 					bestHandInfoList.Add(bestHand);
 				}
-				else if (bestHand.ScoreMax == bestHandInfoList[0].ScoreMax)
+				else if (bestHand.Score == bestHandInfoList[0].Score)
 				{
 					bestHandInfoList.Add(bestHand);
 				}
 			}
 		}
 
+		var a = bestHandInfoList[Random.Range(0, bestHandInfoList.Count)];
+		Debug.LogError("=ベスト 駒"+a.MoveInfo.PieceInfo+"==MoveTo::"+a.MoveInfo.MoveTo+"==");
 		return bestHandInfoList[Random.Range(0, bestHandInfoList.Count)];
 	}
 
-	private BestHandInfo ThinkWorstPlayerHand(Square[,] board)
+	private BestHandInfo ThinkBestPlayerHand(Square[,] board)
 	{
-		var worstHandInfoList = new List<BestHandInfo>();
-		worstHandInfoList.Add(new BestHandInfo());
+		// Debug.LogError("===ThinkBestPlayerHand===");
+		var bestHandInfoList = new List<BestHandInfo>();
+		bestHandInfoList.Add(new BestHandInfo { Score = -9999 });
 
 		for (int x = 1; x < Board.BOARD_WIDTH - 1; x++)
 		{
@@ -70,19 +74,21 @@ public class EnemyAI
 				{
 					continue;
 				}
-				if (bestHand.ScoreMin < worstHandInfoList[0].ScoreMin)
+
+				if (bestHand.Score > bestHandInfoList[0].Score)
 				{
-					worstHandInfoList.Clear();
-					worstHandInfoList.Add(bestHand);
+					// Debug.LogError("=駒::"+bestHand.MoveInfo.PieceInfo+" MoveTo::"+bestHand.MoveInfo.MoveTo+"===Max::"+bestHand.Score+"=");
+					bestHandInfoList.Clear();
+					bestHandInfoList.Add(bestHand);
 				}
-				else if (bestHand.ScoreMin == worstHandInfoList[0].ScoreMin)
+				else if (bestHand.Score == bestHandInfoList[0].Score)
 				{
-					worstHandInfoList.Add(bestHand);
+					bestHandInfoList.Add(bestHand);
 				}
 			}
 		}
 
-		return worstHandInfoList[Random.Range(0, worstHandInfoList.Count)];
+		return bestHandInfoList[Random.Range(0, bestHandInfoList.Count)];
 	}
 
 	/// <summary>
@@ -103,12 +109,13 @@ public class EnemyAI
 		{
 			int score = 0;
 			var saveBoard = BoardUtility.CreateCopyBoard(m_Board);
+
 			// AIの手を打つ
 			m_Board[hand.MoveFrom.X, hand.MoveFrom.Y].SetPieceInfoSimple(PieceInfo.Empty);
 			m_Board[hand.MoveTo.X, hand.MoveTo.Y].SetPieceInfoSimple(hand.PieceInfo);
 
 			// 次の相手の手
-			score = AlphaBetaMin(level - 1, alpha, beta).ScoreMin;
+			score = AlphaBetaMin(level - 1, alpha, beta).Score;
 
 			// AIの手を戻す
 			m_Board = saveBoard;
@@ -120,17 +127,18 @@ public class EnemyAI
 				return bestHand;
 			}
 
-			if (score > bestHand.ScoreMax)
+			if (score > bestHand.Score)
 			{
-				Debug.LogError("=より良い手が見つかった==score::"+score+"=bestHand.ScoreMax::"+bestHand.ScoreMax+"=");
+				Debug.LogError("=より良い手が見つかった==score::"+score+"=bestHand.ScoreMax::"+bestHand.Score+"=");
 				// より良い手が見つかった
-				bestHand.ScoreMax = score;
-				alpha = Mathf.Max(alpha, bestHand.ScoreMax);
+				bestHand.Score = score;
+				alpha = Mathf.Max(alpha, bestHand.Score);
 				bestHand.MoveInfo.SetMoveFrom(m_Board[hand.MoveFrom.X, hand.MoveFrom.Y]);
 				bestHand.MoveInfo.SetMoveTo(hand.MoveTo);
 			}
 		}
 
+		Debug.LogError("=駒:"+bestHand.MoveInfo.PieceInfo+"==MoveTo::"+bestHand.MoveInfo.MoveTo+"==bestHand.Score::"+bestHand.Score+"==");
 		return bestHand;
 	}
 
@@ -141,7 +149,7 @@ public class EnemyAI
 	{
 		if (level == 0)
 		{
-			return ThinkWorstPlayerHand(m_Board); // 現在の局面の評価
+			return ThinkBestPlayerHand(m_Board); // 現在の局面の評価
 		}
 
 		// プレイヤーの可能な手を全て取得
@@ -157,7 +165,7 @@ public class EnemyAI
 			m_Board[hand.MoveTo.X, hand.MoveTo.Y].SetPieceInfoSimple(hand.PieceInfo);
 
 			// 次のAIの手
-			score = AlphaBetaMax(level - 1, alpha, beta).ScoreMax;
+			score = AlphaBetaMax(level - 1, alpha, beta).Score;
 
 			// プレイヤーの手を戻す
 			m_Board = saveBoard;
@@ -168,11 +176,11 @@ public class EnemyAI
 				return bestHand;
 			}
 
-			if (score < bestHand.ScoreMin)
+			if (score < bestHand.Score)
 			{
-				Debug.LogError("=より悪い手が見つかった==score::"+score+"=ScoreMin::"+bestHand.ScoreMin+"=");
-				bestHand.ScoreMin = score;
-				beta = Mathf.Min(beta, bestHand.ScoreMin);
+				Debug.LogError("=より悪い手が見つかった==score::"+score+"=Max::"+bestHand.Score+"=");
+				bestHand.Score = score;
+				beta = Mathf.Min(beta, bestHand.Score);
 				bestHand.MoveInfo.SetMoveFrom(m_Board[hand.MoveFrom.X, hand.MoveFrom.Y]);
 				bestHand.MoveInfo.SetMoveTo(hand.MoveTo);
 			}
@@ -254,8 +262,7 @@ public class EnemyAI
 
 public class BestHandInfo
 {
-	public int ScoreMax = -99999;
-	public int ScoreMin = 99999;
+	public int Score = 0;
 	public PieceMoveInfo MoveInfo = new PieceMoveInfo();
 }
 
