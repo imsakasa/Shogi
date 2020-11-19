@@ -61,7 +61,7 @@ public class Board : MonoBehaviour
 		InitEnemyPiece();
 	}
 
-	public void InitSelfPiece()
+	private void InitSelfPiece()
 	{
 		for (int x = 1; x < BOARD_WIDTH - 1; x++)
 		{
@@ -82,7 +82,7 @@ public class Board : MonoBehaviour
 		m_Board[9, 9].SetPieceInfo(PieceInfo.Lance);	// 香車
 	}
 
-	public void InitEnemyPiece()
+	private void InitEnemyPiece()
 	{
 		for (int x = 1; x < BOARD_WIDTH - 1; x++)
 		{
@@ -103,18 +103,11 @@ public class Board : MonoBehaviour
 		m_Board[9, 1].SetPieceInfo(PieceInfo.Enemy_Lance);		// 香車
 	}
 
-	private async void OnPressedSquare(Square pressedSquare)
+	private void OnPressedSquare(Square pressedSquare)
 	{
 		if (m_PieceMoveInfo.IsSelecting)
 		{
-			bool isNextEnemyTurn = false;
-			PutPiece(pressedSquare, out isNextEnemyTurn);
-			if (isNextEnemyTurn)
-			{
-				// 敵AIの手を打つ
-				await Task.Delay(300);
-				m_EnemyAI.PutPiece(m_Board);
-			}
+			PutPiece(pressedSquare);
 		}
 		else
 		{
@@ -134,7 +127,7 @@ public class Board : MonoBehaviour
 		pressedSquare.SetSelectingColor(isSelecting: true);
 	}
 
-	private void PutPiece(Square moveToSquare, out bool isNextEnemyTurn)
+	private void PutPiece(Square moveToSquare)
 	{
 		var moveFromSquare = m_PieceMoveInfo.SelectingSquare;
 
@@ -143,7 +136,6 @@ public class Board : MonoBehaviour
 		{
 			moveFromSquare.SetSelectingColor(isSelecting: false);
 			m_PieceMoveInfo.Reset();
-			isNextEnemyTurn = false;
 			return;
 		}
 
@@ -152,7 +144,6 @@ public class Board : MonoBehaviour
 		if (!CanPutPiece(moveToSquare, moveFromSquare))
 		{
 			Debug.LogError("そのマスには置けません。");
-			isNextEnemyTurn = false;
 			return;
 		}
 
@@ -164,7 +155,6 @@ public class Board : MonoBehaviour
 			if (IsAcquiredEnemyKing(moveToSquare.PieceInfo))
 			{
 				FinishGame(isWin: true);
-				isNextEnemyTurn = false;
 				return;
 			}
 
@@ -180,13 +170,24 @@ public class Board : MonoBehaviour
 			SystemUI.I.OpenYesNoDialog(
 				string.Empty,
 				$"Do you want to promote piece?\n Selecting piece: {moveFromSquare.PieceInfo.ToString()}",
-				() => PromotePiece(moveToSquare));
+				() => {
+					PromotePiece(moveToSquare);
+					NextEnemyTurn();
+				});
+			return;
 		}
 
-		moveFromSquare.ResetPieceInfo();
+		NextEnemyTurn();
+	}
+
+	private async void NextEnemyTurn()
+	{
+		m_PieceMoveInfo.SelectingSquare.ResetPieceInfo();
 		m_PieceMoveInfo.Reset();
 
-		isNextEnemyTurn = true;
+		// 敵AIの手を打つ
+		await Task.Delay(1000);
+		m_EnemyAI.PutPiece(m_Board);
 	}
 
 	private bool CanPutPiece(Square pressedSquare, Square selectingSquare)
