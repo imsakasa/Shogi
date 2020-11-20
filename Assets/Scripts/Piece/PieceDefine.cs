@@ -7,8 +7,8 @@ public class PieceDefine
 {
 	public class PieceImageName
 	{
-		public static readonly string KING = "King";
-		public static readonly string ROOK = "Rook";
+		public static readonly string King = "King";
+		public static readonly string Rook = "Rook";
 		public static readonly string Bishop = "Bishop";
 		public static readonly string Gold = "Gold";
 		public static readonly string Silver = "Silver";
@@ -18,13 +18,12 @@ public class PieceDefine
 
 		public static readonly string Pro_Rook = "Pro_Rook";
 		public static readonly string Pro_Bishop = "Pro_Bishop";
-		public static readonly string Pro_Gold = "Pro_Gold";
 		public static readonly string Pro_Silver = "Pro_Silver";
 		public static readonly string Pro_Knight = "Pro_Knight";
 		public static readonly string Pro_Lance = "Pro_Lance";
 		public static readonly string Pro_Pawn = "Pro_Pawn";
 
-		public static readonly string Enemy_King = "Enemy_King";
+		public static readonly string Enemy_King = "Enemy_King_sub";
 		public static readonly string Enemy_Rook = "Enemy_Rook";
 		public static readonly string Enemy_Bishop = "Enemy_Bishop";
 		public static readonly string Enemy_Gold = "Enemy_Gold";
@@ -35,11 +34,50 @@ public class PieceDefine
 
 		public static readonly string Enemy_Pro_Rook = "Enemy_Pro_Rook";
 		public static readonly string Enemy_Pro_Bishop = "Enemy_Pro_Bishop";
-		public static readonly string Enemy_Pro_Gold = "Enemy_Pro_Gold";
 		public static readonly string Enemy_Pro_Silver = "Enemy_Pro_Silver";
 		public static readonly string Enemy_Pro_Knight = "Enemy_Pro_Knight";
 		public static readonly string Enemy_Pro_Lance = "Enemy_Pro_Lance";
 		public static readonly string Enemy_Pro_Pawn = "Enemy_Pro_Pawn";
+	}
+
+	public static string GetPieceImageName(PieceInfo pieceInfo)
+	{
+		switch (pieceInfo)
+		{
+			case PieceInfo.King: return PieceImageName.King;
+			case PieceInfo.Rook: return PieceImageName.Rook;
+			case PieceInfo.Bishop: return PieceImageName.Bishop;
+			case PieceInfo.Gold: return PieceImageName.Gold;
+			case PieceInfo.Silver: return PieceImageName.Silver;
+			case PieceInfo.Knight: return PieceImageName.Knight;
+			case PieceInfo.Lance: return PieceImageName.Lance;
+			case PieceInfo.Pawn: return PieceImageName.Pawn;
+
+			case PieceInfo.Pro_Rook: return PieceImageName.Pro_Rook;
+			case PieceInfo.Pro_Bishop: return PieceImageName.Pro_Bishop;
+			case PieceInfo.Pro_Silver: return PieceImageName.Pro_Silver;
+			case PieceInfo.Pro_Knight: return PieceImageName.Pro_Knight;
+			case PieceInfo.Pro_Lance: return PieceImageName.Pro_Lance;
+			case PieceInfo.Pro_Pawn: return PieceImageName.Pro_Pawn;
+
+			case PieceInfo.Enemy_King: return PieceImageName.Enemy_King;
+			case PieceInfo.Enemy_Rook: return PieceImageName.Enemy_Rook;
+			case PieceInfo.Enemy_Bishop: return PieceImageName.Enemy_Bishop;
+			case PieceInfo.Enemy_Gold: return PieceImageName.Enemy_Gold;
+			case PieceInfo.Enemy_Silver: return PieceImageName.Enemy_Gold;
+			case PieceInfo.Enemy_Knight: return PieceImageName.Enemy_Knight;
+			case PieceInfo.Enemy_Lance: return PieceImageName.Enemy_Lance;
+			case PieceInfo.Enemy_Pawn: return PieceImageName.Enemy_Pawn;
+
+			case PieceInfo.Enemy_Pro_Rook: return PieceImageName.Enemy_Pro_Rook;
+			case PieceInfo.Enemy_Pro_Bishop: return PieceImageName.Enemy_Pro_Bishop;
+			case PieceInfo.Enemy_Pro_Silver: return PieceImageName.Enemy_Pro_Silver;
+			case PieceInfo.Enemy_Pro_Knight: return PieceImageName.Enemy_Pro_Knight;
+			case PieceInfo.Enemy_Pro_Lance: return PieceImageName.Enemy_Pro_Lance;
+			case PieceInfo.Enemy_Pro_Pawn: return PieceImageName.Enemy_Pro_Pawn;
+
+			default: return string.Empty;
+		}
 	}
 
 	// 評価関数用の駒の価値

@@ -42,7 +42,8 @@ public class Square : MonoBehaviour
 		PieceInfo = info;
 		if (info > PieceInfo.Empty)
 		{
-			var sprite = Resources.Load<Sprite>($"Textures/japanese-chess/koma/60x64/{info.ToString()}");
+			string pieceImageName = PieceDefine.GetPieceImageName(info);
+			var sprite = Resources.Load<Sprite>($"Textures/japanese-chess/koma/60x64/{pieceImageName}");
 			m_PieceImage.sprite = sprite;
 			m_PieceImage.enabled = true;
 		}
