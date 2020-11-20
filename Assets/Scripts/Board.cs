@@ -168,12 +168,14 @@ public class Board : MonoBehaviour
 		if (CanPiecePromote(moveToSquare.Address, moveFromSquare.PieceInfo))
 		{
 			SystemUI.I.OpenYesNoDialog(
-				string.Empty,
-				$"Do you want to promote piece?\n Selecting piece: {moveFromSquare.PieceInfo.ToString()}",
-				() => {
+				title: string.Empty,
+				body: $"Do you want to promote piece?\n Selecting piece: {moveFromSquare.PieceInfo.ToString()}",
+				yesCallback: () => {
 					PromotePiece(moveToSquare);
 					NextEnemyTurn();
-				});
+				},
+				noCallback: NextEnemyTurn
+			);
 			return;
 		}
 
