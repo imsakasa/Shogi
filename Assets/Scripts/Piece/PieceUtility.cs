@@ -100,6 +100,12 @@ public static class PieceUtility
 			case PieceInfo.Enemy_Knight: return new EnemyKnight();
 			case PieceInfo.Enemy_Lance: return new EnemyLance();
 			case PieceInfo.Enemy_Pawn: return new EnemyPawn();
+			case PieceInfo.Enemy_Pro_Rook: return new EnemyPromotedRook();
+			case PieceInfo.Enemy_Pro_Bishop: return new EnemyPromotedBishop();
+			case PieceInfo.Enemy_Pro_Silver: return new EnemyPromotedSilver();
+			case PieceInfo.Enemy_Pro_Knight: return new EnemyPromotedKnight();
+			case PieceInfo.Enemy_Pro_Lance: return new EnemyPromotedLance();
+			case PieceInfo.Enemy_Pro_Pawn: return new EnemyPromotedPawn();
 			default:
 				return null;
 		}
