@@ -56,16 +56,8 @@ public class Square : MonoBehaviour
 
 	public void ResetPieceInfo() => SetPieceInfo(PieceInfo.Empty);
 
-	public bool IsSelf()
-	{
-		return (PieceInfo.King <= PieceInfo && PieceInfo <= PieceInfo.Pro_Pawn);
-	}
-
-	public bool IsEnemy()
-	{
-		return (PieceInfo & PieceInfo.Enemy) == PieceInfo.Enemy;
-	}
-
+	public bool IsSelf() => (PieceInfo.King <= PieceInfo && PieceInfo <= PieceInfo.Pro_Pawn);
+	public bool IsEnemy() => (PieceInfo & PieceInfo.Enemy) == PieceInfo.Enemy;
 	public bool IsEmpty() => PieceInfo <= PieceInfo.Empty;
 
 	public void SetSelectingColor(bool isSelecting)

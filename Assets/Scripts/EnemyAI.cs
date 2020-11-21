@@ -5,7 +5,7 @@ using UnityEngine;
 public class EnemyAI
 {
 	private Square[,] m_Board;
-	public void PutPiece(Square[,] board)
+	public PieceMoveInfo ThinkEnemyAIHand(Square[,] board)
 	{
 		m_Board = BoardUtility.CreateCopyBoard(board);
 
@@ -14,8 +14,9 @@ public class EnemyAI
 		var moveFromSquare = board[bestHand.MoveInfo.MoveFrom.X, bestHand.MoveInfo.MoveFrom.Y];
 		var moveToSquare = board[bestHand.MoveInfo.MoveTo.X, bestHand.MoveInfo.MoveTo.Y];
 
-		moveToSquare.SetPieceInfo(moveFromSquare.PieceInfo);
-		moveFromSquare.ResetPieceInfo();
+		Debug.LogError(bestHand.MoveInfo.MoveTo+" 駒:"+bestHand.MoveInfo.PieceInfo);
+
+		return bestHand.MoveInfo;
 	}
 
 	private BestHandInfo ThinkBestAIHand(Square[,] board)

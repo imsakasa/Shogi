@@ -9,6 +9,12 @@ public class Board : MonoBehaviour
 {
 	public static readonly int BOARD_WIDTH = 11;
 
+	public enum PlayerType
+	{
+		Self,
+		Enemy,
+	}
+
 	private EnemyAI m_EnemyAI = new EnemyAI();
 
 	[SerializeField]
@@ -152,14 +158,14 @@ public class Board : MonoBehaviour
 		if (moveToSquare.IsEnemy())
 		{
 			// 敵の王将を取れば勝ち
-			if (IsAcquiredEnemyKing(moveToSquare.PieceInfo))
+			if (IsAcquiredKing(moveToSquare.PieceInfo, PlayerType.Self))
 			{
-				FinishGame(isWin: true);
+				FinishGame(isPlayerWin: true);
 				return;
 			}
 
 			// 敵の駒を獲得したら持ち駒に追加
-			AcquiredEnemyPiece(moveToSquare);
+			AcquiredPiece(moveToSquare.PieceInfo, PlayerType.Self);
 		}
 
 		moveToSquare.SetPieceInfo(moveFromSquare.PieceInfo);
@@ -172,24 +178,43 @@ public class Board : MonoBehaviour
 				body: $"Do you want to promote piece?\n Selecting piece: {moveFromSquare.PieceInfo.ToString()}",
 				yesCallback: () => {
 					PromotePiece(moveToSquare);
-					NextEnemyTurn();
+					PutEnemyPiece();
 				},
-				noCallback: NextEnemyTurn
+				noCallback: PutEnemyPiece
 			);
 			return;
 		}
 
-		NextEnemyTurn();
+		PutEnemyPiece();
 	}
 
-	private async void NextEnemyTurn()
+	private async void PutEnemyPiece()
 	{
 		m_PieceMoveInfo.SelectingSquare.ResetPieceInfo();
 		m_PieceMoveInfo.Reset();
 
-		// 敵AIの手を打つ
-		await Task.Delay(1000);
-		m_EnemyAI.PutPiece(m_Board);
+		// 敵AIの手を打つまで少し時間を置く
+		await Task.Delay(500);
+
+		var enemyHand = m_EnemyAI.ThinkEnemyAIHand(m_Board);
+		var moveFromSquare = m_Board[enemyHand.MoveFrom.X, enemyHand.MoveFrom.Y];
+		var moveToSquare = m_Board[enemyHand.MoveTo.X, enemyHand.MoveTo.Y];
+
+		if (moveToSquare.IsSelf())
+		{
+			// 敵の王将を取れば勝ち
+			if (IsAcquiredKing(moveToSquare.PieceInfo, PlayerType.Enemy))
+			{
+				FinishGame(isPlayerWin: false);
+				return;
+			}
+
+			// 敵の駒を獲得したら持ち駒に追加
+			AcquiredPiece(moveToSquare.PieceInfo, PlayerType.Enemy);
+		}
+
+		moveToSquare.SetPieceInfo(moveFromSquare.PieceInfo);
+		moveFromSquare.ResetPieceInfo();
 	}
 
 	private bool CanPutPiece(Square pressedSquare, Square selectingSquare)
@@ -251,18 +276,32 @@ public class Board : MonoBehaviour
 		return GetSquare(address).IsEnemy();
 	}
 
-	private void AcquiredEnemyPiece(Square pressedSquare)
+	private void AcquiredPiece(PieceInfo pieceInfo, PlayerType currentPlayerType)
 	{
-		// 敵の駒を獲得したら持ち駒に追加
-		m_SelfAcquiredPieces.AcquiredPiece(pressedSquare.PieceInfo, OnPressedSquare);
+		if (currentPlayerType == PlayerType.Self)
+		{
+			// 敵の駒を獲得したら持ち駒に追加
+			m_SelfAcquiredPieces.AcquiredPiece(pieceInfo, OnPressedSquare);
+		}
+		else if (currentPlayerType == PlayerType.Enemy)
+		{
+			m_EnemyAcquiredPieces.AcquiredPiece(pieceInfo, null);
+		}
 	}
 
-	private bool IsAcquiredEnemyKing(PieceInfo pieceInfo)
+	private bool IsAcquiredKing(PieceInfo pieceInfo, PlayerType currentPlayerType)
 	{
-		return pieceInfo == PieceInfo.Enemy_King;
+		if (currentPlayerType == PlayerType.Self)
+		{
+			return pieceInfo == PieceInfo.Enemy_King;
+		}
+		else
+		{
+			return pieceInfo == PieceInfo.King;
+		}
 	}
 
-	private void FinishGame(bool isWin)
+	private void FinishGame(bool isPlayerWin)
 	{
 		ResetGame();
 	}

@@ -111,9 +111,20 @@ public static class PieceUtility
 		}
 	}
 
-	public static PieceInfo ReverseInfoToSelf(PieceInfo pieceInfo)
+	public static PieceInfo ReversePieceInfo(PieceInfo pieceInfo)
 	{
-		return pieceInfo -= PieceInfo.Enemy;
+		// 敵側の駒の場合
+		if ((pieceInfo & PieceInfo.Enemy) == PieceInfo.Enemy)
+		{
+			return pieceInfo -= PieceInfo.Enemy;
+		}
+
+		// プレイヤー側の駒の場合
+		if ((pieceInfo & PieceInfo.Promoted) == PieceInfo.Promoted)
+		{
+			pieceInfo -= PieceInfo.Promoted;
+		}
+		return pieceInfo |= PieceInfo.Enemy;
 	}
 
 	public static List<Address> VerticalRanges(int x)
