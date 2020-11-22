@@ -15,6 +15,11 @@ public abstract class PieceBase
 
 		foreach (var moveTo in moveRanges)
 		{
+			if (!moveTo.IsValid())
+			{
+				Debug.LogError("想定外の場所でエラーが起きました。Address -> "+moveTo);
+				continue;
+			}
 			PieceInfo pieceInfo = board[moveTo.X, moveTo.Y].PieceInfo;
 			int pieceValue = PieceDefine.GetPieceValue(pieceInfo);
 			// TODO: 空のマスにも移動できるように >= の = も付けているが、それでいいのか再検討

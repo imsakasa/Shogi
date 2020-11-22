@@ -5,6 +5,7 @@ using UnityEngine;
 public class EnemyAI
 {
 	private Square[,] m_Board;
+
 	public PieceMoveInfo ThinkEnemyAIHand(Square[,] board)
 	{
 		m_Board = BoardUtility.CreateCopyBoard(board);
@@ -101,7 +102,7 @@ public class EnemyAI
 		}
 
 		// AIの可能な手を全て取得
-		List<HandInfo> allHandList = GetAllAIHandList(m_Board);
+		List<PieceMoveInfo> allHandList = GetAllHandList(m_Board, Board.Player.Enemy);
 
 		var bestHand = new BestHandInfo{Score = -9999};
 		foreach (var hand in allHandList)
@@ -150,7 +151,7 @@ public class EnemyAI
 		}
 
 		// プレイヤーの可能な手を全て取得
-		List<HandInfo> allHandList = GetAllPlayerHandList(m_Board);
+		List<PieceMoveInfo> allHandList = GetAllHandList(m_Board, Board.Player.Self);
 
 		var bestHand = new BestHandInfo{Score = 9999};
 		foreach (var hand in allHandList)
@@ -185,50 +186,21 @@ public class EnemyAI
 		return bestHand;
 	}
 
-	private List<HandInfo> GetAllAIHandList(Square[,] board)
+	private List<PieceMoveInfo> GetAllHandList(Square[,] board, Board.Player playerType)
 	{
-		var handList = new List<HandInfo>();
+		var handList = new List<PieceMoveInfo>();
 
 		for (int x = 1; x < Board.BOARD_WIDTH - 1; x++)
 		for (int y = 1; y < Board.BOARD_WIDTH - 1; y++)
 		{
 			Square square = board[x, y];
-			EnemyPieceBase enemyPiece = GetSquareEnemyPiece(square);
-			if (enemyPiece == null) continue;
+			PieceBase piece = (playerType == Board.Player.Self) ? GetSquarePlayerPiece(square) : GetSquareEnemyPiece(square);
+			if (piece == null) continue;
 
-			var moveRanges = enemyPiece.MoveRanges(board, square.Address);
+			var moveRanges = piece.MoveRanges(board, square.Address);
 			for (int i = 0; i < moveRanges.Count; i++)
 			{
-				handList.Add(new HandInfo {
-					MoveFrom = square.Address,
-					MoveTo = moveRanges[i],
-					PieceInfo = square.PieceInfo,
-				});
-			}
-		}
-
-		return handList;
-	}
-
-	private List<HandInfo> GetAllPlayerHandList(Square[,] board)
-	{
-		var handList = new List<HandInfo>();
-
-		for (int x = 1; x < Board.BOARD_WIDTH - 1; x++)
-		for (int y = 1; y < Board.BOARD_WIDTH - 1; y++)
-		{
-			Square square = board[x, y];
-			PieceBase playerPiece = GetSquarePlayerPiece(square);
-			if (playerPiece == null) continue;
-
-			var moveRanges = playerPiece.MoveRanges(board, square.Address);
-			for (int i = 0; i < moveRanges.Count; i++)
-			{
-				handList.Add(new HandInfo {
-					MoveFrom = square.Address,
-					MoveTo = moveRanges[i],
-					PieceInfo = square.PieceInfo,
-				});
+				handList.Add(new PieceMoveInfo(square.Address, moveRanges[i], square.PieceInfo));
 			}
 		}
 
@@ -260,11 +232,4 @@ public class BestHandInfo
 {
 	public int Score = 0;
 	public PieceMoveInfo MoveInfo = new PieceMoveInfo();
-}
-
-public class HandInfo
-{
-	public Address MoveFrom;
-	public Address MoveTo;
-	public PieceInfo PieceInfo;
 }

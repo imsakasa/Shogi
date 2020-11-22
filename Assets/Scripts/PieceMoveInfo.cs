@@ -7,17 +7,25 @@ public class PieceMoveInfo
 	public Address MoveFrom { get; private set; } = Address.INVALID_ADDRESS;
 	public Address MoveTo { get; private set; } = Address.INVALID_ADDRESS;
 	public PieceInfo PieceInfo { get; private set; } = PieceInfo.Empty;
-	public Square SelectingSquare { get; private set; }
 
-	public bool IsSelecting => SelectingSquare != null;
-	public bool IsPromote => (PieceInfo & PieceInfo.Promoted) == PieceInfo.Promoted;
-	public bool IsAcquiredPiece => IsSelecting && !SelectingSquare.Address.IsValid();
+	public bool IsSelecting { get; private set; }
+	public bool IsMoveAcquiredPiece => IsSelecting && !MoveFrom.IsValid();
+
+	public PieceMoveInfo(){}
+
+	public PieceMoveInfo(Address moveFrom, Address moveTo, PieceInfo pieceInfo)
+	{
+		MoveFrom = moveFrom;
+		MoveTo = moveTo;
+		PieceInfo = pieceInfo;
+		IsSelecting = true;
+	}
 
 	public void SetMoveFrom(Square square)
 	{
 		MoveFrom = square.Address;
 		PieceInfo = square.PieceInfo;
-		SelectingSquare = square;
+		IsSelecting = true;
 	}
 	public void SetMoveTo(Address to) => MoveTo = to;
 	public bool IsSameAddress(Address to) => MoveFrom == to;
@@ -27,6 +35,6 @@ public class PieceMoveInfo
 		MoveFrom = Address.INVALID_ADDRESS;
 		MoveTo = Address.INVALID_ADDRESS;
 		PieceInfo = PieceInfo.OutOfBoard;
-		SelectingSquare = null;
+		IsSelecting = false;
 	}
 }

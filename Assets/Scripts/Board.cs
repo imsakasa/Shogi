@@ -9,7 +9,7 @@ public class Board : MonoBehaviour
 {
 	public static readonly int BOARD_WIDTH = 11;
 
-	public enum PlayerType
+	public enum Player
 	{
 		Self,
 		Enemy,
@@ -25,7 +25,7 @@ public class Board : MonoBehaviour
 	// 将棋は 9 × 9 マスだが、番兵を入れるため上下左右1マスずつ追加
 	// TODO: 番兵をまだ活用できてないので後ほど対応を検討
 	private Square[,] m_Board = new Square[BOARD_WIDTH, BOARD_WIDTH];
-	public Square GetSquare(Address address)
+	private Square GetSquare(Address address)
 	{
 		if (!address.IsValid())
 		{
@@ -76,7 +76,6 @@ public class Board : MonoBehaviour
 
 		m_Board[2, 8].SetPieceInfo(PieceInfo.Rook);		// 飛車
 		m_Board[8, 8].SetPieceInfo(PieceInfo.Bishop);	// 角行
-
 		m_Board[1, 9].SetPieceInfo(PieceInfo.Lance);	// 香車
 		m_Board[2, 9].SetPieceInfo(PieceInfo.Knight);	// 桂馬
 		m_Board[3, 9].SetPieceInfo(PieceInfo.Silver);	// 銀将
@@ -97,7 +96,6 @@ public class Board : MonoBehaviour
 
 		m_Board[8, 2].SetPieceInfo(PieceInfo.Enemy_Rook);		// 飛車
 		m_Board[2, 2].SetPieceInfo(PieceInfo.Enemy_Bishop);		// 角行
-
 		m_Board[1, 1].SetPieceInfo(PieceInfo.Enemy_Lance);		// 香車
 		m_Board[2, 1].SetPieceInfo(PieceInfo.Enemy_Knight);		// 桂馬
 		m_Board[3, 1].SetPieceInfo(PieceInfo.Enemy_Silver);		// 銀将
@@ -135,7 +133,7 @@ public class Board : MonoBehaviour
 
 	private void PutPiece(Square moveToSquare)
 	{
-		var moveFromSquare = m_PieceMoveInfo.SelectingSquare;
+		var moveFromSquare = GetSquare(m_PieceMoveInfo.MoveFrom);
 
 		// 同じマスを選択すればリセット
 		if (m_PieceMoveInfo.IsSameAddress(moveToSquare.Address))
@@ -158,14 +156,14 @@ public class Board : MonoBehaviour
 		if (moveToSquare.IsEnemy())
 		{
 			// 敵の王将を取れば勝ち
-			if (IsAcquiredKing(moveToSquare.PieceInfo, PlayerType.Self))
+			if (IsAcquiredKing(moveToSquare.PieceInfo, Player.Self))
 			{
 				FinishGame(isPlayerWin: true);
 				return;
 			}
 
 			// 敵の駒を獲得したら持ち駒に追加
-			AcquiredPiece(moveToSquare.PieceInfo, PlayerType.Self);
+			AcquiredPiece(moveToSquare.PieceInfo, Player.Self);
 		}
 
 		moveToSquare.SetPieceInfo(moveFromSquare.PieceInfo);
@@ -190,27 +188,27 @@ public class Board : MonoBehaviour
 
 	private async void PutEnemyPiece()
 	{
-		m_PieceMoveInfo.SelectingSquare.ResetPieceInfo();
+		GetSquare(m_PieceMoveInfo.MoveFrom).ResetPieceInfo();
 		m_PieceMoveInfo.Reset();
 
 		// 敵AIの手を打つまで少し時間を置く
 		await Task.Delay(500);
 
 		var enemyHand = m_EnemyAI.ThinkEnemyAIHand(m_Board);
-		var moveFromSquare = m_Board[enemyHand.MoveFrom.X, enemyHand.MoveFrom.Y];
-		var moveToSquare = m_Board[enemyHand.MoveTo.X, enemyHand.MoveTo.Y];
+		var moveFromSquare = GetSquare(enemyHand.MoveFrom);
+		var moveToSquare = GetSquare(enemyHand.MoveTo);
 
 		if (moveToSquare.IsSelf())
 		{
 			// 敵の王将を取れば勝ち
-			if (IsAcquiredKing(moveToSquare.PieceInfo, PlayerType.Enemy))
+			if (IsAcquiredKing(moveToSquare.PieceInfo, Player.Enemy))
 			{
 				FinishGame(isPlayerWin: false);
 				return;
 			}
 
 			// 敵の駒を獲得したら持ち駒に追加
-			AcquiredPiece(moveToSquare.PieceInfo, PlayerType.Enemy);
+			AcquiredPiece(moveToSquare.PieceInfo, Player.Enemy);
 		}
 
 		moveToSquare.SetPieceInfo(moveFromSquare.PieceInfo);
@@ -225,7 +223,7 @@ public class Board : MonoBehaviour
 		}
 
 		// 二歩チェック
-		if (IsTwoPawn(m_PieceMoveInfo, pressedSquare.Address.X))
+		if (BoardUtility.IsTwoPawn(m_Board, m_PieceMoveInfo, pressedSquare.Address.X))
 		{
 			return false;
 		}
@@ -239,22 +237,6 @@ public class Board : MonoBehaviour
 		return true;
 	}
 
-	private bool IsTwoPawn(PieceMoveInfo pieceMoveInfo, int x)
-	{
-		if (!pieceMoveInfo.IsAcquiredPiece)
-		{
-			return false;
-		}
-
-		if (pieceMoveInfo.PieceInfo != PieceInfo.Pawn)
-		{
-			return false;
-		}
-
-		var ranges = BoardUtility.VerticalRanges(x);
-		return ranges.Any(address => GetSquare(address).PieceInfo == PieceInfo.Pawn);
-	}
-
 	private bool CanPiecePromote(Address putAddress, PieceInfo pieceInfo)
 	{
 		return BoardUtility.IsEnemyArea(putAddress) && PieceUtility.CanPromote(pieceInfo);
@@ -266,32 +248,25 @@ public class Board : MonoBehaviour
 		targetSquare.SetPieceInfo(currentPieceInfo | PieceInfo.Promoted);
 	}
 
-	public bool IsPuttedSelfPiece(Address address)
-	{
-		return GetSquare(address).IsSelf();
-	}
+	public bool IsPuttedSelfPiece(Address address) => GetSquare(address).IsSelf();
+	public bool IsPuttedEnemyPiece(Address address) => GetSquare(address).IsEnemy();
 
-	public bool IsPuttedEnemyPiece(Address address)
+	private void AcquiredPiece(PieceInfo pieceInfo, Player currentPlayerType)
 	{
-		return GetSquare(address).IsEnemy();
-	}
-
-	private void AcquiredPiece(PieceInfo pieceInfo, PlayerType currentPlayerType)
-	{
-		if (currentPlayerType == PlayerType.Self)
+		if (currentPlayerType == Player.Self)
 		{
 			// 敵の駒を獲得したら持ち駒に追加
 			m_SelfAcquiredPieces.AcquiredPiece(pieceInfo, OnPressedSquare);
 		}
-		else if (currentPlayerType == PlayerType.Enemy)
+		else if (currentPlayerType == Player.Enemy)
 		{
 			m_EnemyAcquiredPieces.AcquiredPiece(pieceInfo, null);
 		}
 	}
 
-	private bool IsAcquiredKing(PieceInfo pieceInfo, PlayerType currentPlayerType)
+	private bool IsAcquiredKing(PieceInfo pieceInfo, Player currentPlayerType)
 	{
-		if (currentPlayerType == PlayerType.Self)
+		if (currentPlayerType == Player.Self)
 		{
 			return pieceInfo == PieceInfo.Enemy_King;
 		}

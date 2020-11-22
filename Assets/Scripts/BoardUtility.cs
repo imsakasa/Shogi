@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public static class BoardUtility
 {
@@ -33,5 +34,21 @@ public static class BoardUtility
 		}
 
 		return copyBoard;
+	}
+
+	public static bool IsTwoPawn(Square[,] board, PieceMoveInfo pieceMoveInfo, int x)
+	{
+		if (!pieceMoveInfo.IsMoveAcquiredPiece)
+		{
+			return false;
+		}
+
+		if (pieceMoveInfo.PieceInfo != PieceInfo.Pawn)
+		{
+			return false;
+		}
+
+		var ranges = BoardUtility.VerticalRanges(x);
+		return ranges.Any(address => board[address.X, address.Y].PieceInfo == PieceInfo.Pawn);
 	}
 }
