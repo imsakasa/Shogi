@@ -133,7 +133,7 @@ public class Board : MonoBehaviour
 
 	private void PutPiece(Square moveToSquare)
 	{
-		var moveFromSquare = GetSquare(m_PieceMoveInfo.MoveFrom);
+		var moveFromSquare = m_PieceMoveInfo.SelectingSquare;
 
 		// 同じマスを選択すればリセット
 		if (m_PieceMoveInfo.IsSameAddress(moveToSquare.Address))
@@ -188,7 +188,7 @@ public class Board : MonoBehaviour
 
 	private async void PutEnemyPiece()
 	{
-		GetSquare(m_PieceMoveInfo.MoveFrom).ResetPieceInfo();
+		m_PieceMoveInfo.SelectingSquare.ResetPieceInfo();
 		m_PieceMoveInfo.Reset();
 
 		// 敵AIの手を打つまで少し時間を置く
@@ -215,21 +215,22 @@ public class Board : MonoBehaviour
 		moveFromSquare.ResetPieceInfo();
 	}
 
-	private bool CanPutPiece(Square pressedSquare, Square selectingSquare)
+	private bool CanPutPiece(Square moveToSquare, Square moveFromSquare)
 	{
-		if (pressedSquare.IsSelf())
+		if (moveToSquare.IsSelf())
 		{
 			return false;
 		}
 
 		// 二歩チェック
-		if (BoardUtility.IsTwoPawn(m_Board, m_PieceMoveInfo, pressedSquare.Address.X))
+		if (BoardUtility.IsTwoPawn(m_Board, m_PieceMoveInfo, moveToSquare.Address.X))
 		{
 			return false;
 		}
 
-		PlayerPieceBase piece = PieceUtility.CreatePiece(selectingSquare.PieceInfo);
-		if (!piece.CanMove(m_Board, m_PieceMoveInfo))
+		bool isSelectingAquiredPiece = !moveFromSquare.Address.IsValid();
+		PlayerPieceBase piece = PieceUtility.CreatePiece(moveFromSquare.PieceInfo);
+		if (!isSelectingAquiredPiece && !piece.CanMove(m_Board, m_PieceMoveInfo))
 		{
 			return false;
 		}
