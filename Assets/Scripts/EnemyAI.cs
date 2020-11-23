@@ -104,7 +104,8 @@ public class EnemyAI
 		// AIの可能な手を全て取得
 		List<PieceMoveInfo> allHandList = GetAllHandList(m_Board, Board.Player.Enemy);
 
-		var bestHand = new BestHandInfo{Score = -9999};
+		const int INIT_SCORE = -9999;
+		var bestHand = new BestHandInfo{Score = INIT_SCORE};
 		foreach (var hand in allHandList)
 		{
 			int score = 0;
@@ -127,8 +128,16 @@ public class EnemyAI
 				return bestHand;
 			}
 
-			if (score > bestHand.Score)
+			if (score >= bestHand.Score)
 			{
+				// スコアが同じ場合はランダム抽選
+				if (score != INIT_SCORE &&
+					score == bestHand.Score &&
+					Random.Range(0, 2) == 0)
+				{
+					continue;
+				}
+
 				// より良い手が見つかった
 				bestHand.Score = score;
 				alpha = Mathf.Max(alpha, bestHand.Score);
@@ -153,7 +162,8 @@ public class EnemyAI
 		// プレイヤーの可能な手を全て取得
 		List<PieceMoveInfo> allHandList = GetAllHandList(m_Board, Board.Player.Self);
 
-		var bestHand = new BestHandInfo{Score = 9999};
+		const int INIT_SCORE = 9999;
+		var bestHand = new BestHandInfo{Score = INIT_SCORE};
 		foreach (var hand in allHandList)
 		{
 			int score = 0;
@@ -174,8 +184,16 @@ public class EnemyAI
 				return bestHand;
 			}
 
-			if (score < bestHand.Score)
+			if (score <= bestHand.Score)
 			{
+				// スコアが同じ場合はランダム抽選
+				if (score != INIT_SCORE &&
+					score == bestHand.Score &&
+					Random.Range(0, 2) == 0)
+				{
+					continue;
+				}
+
 				bestHand.Score = score;
 				beta = Mathf.Min(beta, bestHand.Score);
 				bestHand.MoveInfo.SetMoveFrom(m_Board[hand.MoveFrom.X, hand.MoveFrom.Y]);
