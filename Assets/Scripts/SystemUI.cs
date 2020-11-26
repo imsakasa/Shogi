@@ -17,6 +17,19 @@ public class SystemUI : SingletonMonoBehaviour<SystemUI>
 	[SerializeField]
 	private TextMeshProUGUI m_Telop;
 
+	[SerializeField]
+	private Button m_StopButton;
+
+	public class EventHandlers
+	{
+		public UnityAction OnStop;
+	}
+
+	public void RegisterEvent(EventHandlers eventHandlers)
+	{
+		m_StopButton.onClick.AddListener(() => OpenYesNoDialog("Reset Game", "Reset the game?", eventHandlers.OnStop, null));
+	}
+
 	private void CreateDialog(string prefabPath)
 	{
 		GameObject originalObj = (GameObject)Resources.Load(prefabPath);
