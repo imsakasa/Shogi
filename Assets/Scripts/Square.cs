@@ -68,6 +68,6 @@ public class Square : MonoBehaviour
 
 	public void OnPressed()
 	{
-		m_OnPressed.Invoke(this);
+		m_OnPressed?.Invoke(this);
 	}
 }
