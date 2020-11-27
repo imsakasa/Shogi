@@ -175,7 +175,7 @@ public class Board : MonoBehaviour
 		moveToSquare.SetPieceInfo(moveFromSquare.PieceInfo);
 
 		// 成ることができるなら成る/成らないのダイアログ表示
-		if (CanPiecePromote(moveToSquare.Address, moveFromSquare.PieceInfo))
+		if (CanPiecePromote(moveFromSquare, moveToSquare.Address))
 		{
 			SystemUI.I.OpenYesNoDialog(
 				title: string.Empty,
@@ -244,9 +244,15 @@ public class Board : MonoBehaviour
 		return true;
 	}
 
-	private bool CanPiecePromote(Address putAddress, PieceInfo pieceInfo)
+	private bool CanPiecePromote(Square moveFromSquare, Address putAddress)
 	{
-		return BoardUtility.IsEnemyArea(putAddress) && PieceUtility.CanPromote(pieceInfo);
+		// 持ち駒から置く場合は成らない
+		if (!moveFromSquare.Address.IsValid())
+		{
+			return false;
+		}
+
+		return BoardUtility.IsEnemyArea(putAddress) && PieceUtility.CanPromote(moveFromSquare.PieceInfo);
 	}
 
 	private void PromotePiece(Square targetSquare)
