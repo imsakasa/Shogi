@@ -234,9 +234,9 @@ public class Board : MonoBehaviour
 			return false;
 		}
 
-		bool isSelectingAquiredPiece = !moveFromSquare.Address.IsValid();
+		bool isSelectingAcquiredPiece = !moveFromSquare.Address.IsValid();
 		PlayerPieceBase piece = PieceUtility.CreatePiece(moveFromSquare.PieceInfo);
-		if (!isSelectingAquiredPiece && !piece.CanMove(m_Board, m_PieceMoveInfo))
+		if (!isSelectingAcquiredPiece && !piece.CanMove(m_Board, m_PieceMoveInfo))
 		{
 			return false;
 		}
