@@ -4,13 +4,24 @@ using UnityEngine;
 
 public class EnemyAI
 {
+	[System.Flags]
+	public enum Difficulty
+	{
+		Easy = 1,
+		Normal = 3,
+		Hard = 5,
+	}
+
+	private int m_DeepLevel = (int)Difficulty.Easy;
+	public void SetDeepLevel(Difficulty difficulty) => m_DeepLevel = (int)difficulty;
+
 	private Square[,] m_Board;
 
 	public PieceMoveInfo ThinkEnemyAIHand(Square[,] board)
 	{
 		m_Board = BoardUtility.CreateCopyBoard(board);
 
-		BestHandInfo bestHand = AlphaBetaMax(level: 1, alpha: 0, beta: 999999);
+		BestHandInfo bestHand = AlphaBetaMax(level: m_DeepLevel, alpha: 0, beta: 999999);
 
 		var moveFromSquare = board[bestHand.MoveInfo.MoveFrom.X, bestHand.MoveInfo.MoveFrom.Y];
 		var moveToSquare = board[bestHand.MoveInfo.MoveTo.X, bestHand.MoveInfo.MoveTo.Y];

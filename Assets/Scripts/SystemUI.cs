@@ -18,16 +18,26 @@ public class SystemUI : SingletonMonoBehaviour<SystemUI>
 	private TextMeshProUGUI m_Telop;
 
 	[SerializeField]
-	private Button m_StopButton;
+	private Button m_SettingsButton;
+
+	[SerializeField]
+	private SettingsDialog m_SettingsDialog;
 
 	public class EventHandlers
 	{
-		public UnityAction OnStop;
+		public UnityAction OnReset;
+		public UnityAction<EnemyAI.Difficulty> OnChangeDifficulty;
+	}
+
+	void Start()
+	{
+		m_SettingsDialog.gameObject.SetActive(false);
+		m_SettingsButton.onClick.AddListener(() => m_SettingsDialog.gameObject.SetActive(true));
 	}
 
 	public void RegisterEvent(EventHandlers eventHandlers)
 	{
-		m_StopButton.onClick.AddListener(() => OpenYesNoDialog("Reset Game", "Reset the game?", eventHandlers.OnStop, null));
+		m_SettingsDialog.RegisterEvent(eventHandlers);
 	}
 
 	private void CreateDialog(string prefabPath)

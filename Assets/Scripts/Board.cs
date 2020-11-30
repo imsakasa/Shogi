@@ -52,8 +52,9 @@ public class Board : MonoBehaviour
 
 		var eventHandlers = new SystemUI.EventHandlers
 		{
-			OnStop = InitBoard,
-		};
+			OnReset = InitBoard,
+			OnChangeDifficulty = m_EnemyAI.SetDeepLevel,
+	};
 		SystemUI.I.RegisterEvent(eventHandlers);
 
 		InitBoard();
